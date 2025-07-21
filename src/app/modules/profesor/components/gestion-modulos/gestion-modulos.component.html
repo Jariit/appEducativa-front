@@ -1,0 +1,42 @@
+<!-- gestion-modulos.component.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profesor/cursos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Módulos del Curso</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let modulo of modulos" [routerLink]="['/profesor/modulos', modulo.id, 'actividades']">
+      <ion-label>
+        <h2>{{ modulo.titulo }}</h2>
+        <p>{{ modulo.descripcion }}</p>
+      </ion-label>
+      <ion-badge slot="end">Orden: {{ modulo.orden }}</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>Agregar Módulo</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Título</ion-label>
+        <ion-input [(ngModel)]="nuevoModulo.titulo"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-input [(ngModel)]="nuevoModulo.descripcion"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Orden</ion-label>
+        <ion-input type="number" [(ngModel)]="nuevoModulo.orden"></ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="agregarModulo()">Agregar Módulo</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

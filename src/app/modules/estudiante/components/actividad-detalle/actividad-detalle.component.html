@@ -1,0 +1,73 @@
+<!-- actividad-detalle.component.html -->
+
+<!-- Reemplaza los headers existentes en tus componentes de estudiante -->
+<!-- Reemplaza los headers existentes por: -->
+<app-header></app-header>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/estudiante/modulo/1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ activity.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ activity.title }}</ion-card-title>
+      <ion-card-subtitle *ngIf="activity.dueDate">
+        <ion-icon name="calendar-outline"></ion-icon>
+        Fecha límite: {{ activity.dueDate | date }}
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <h3>Descripción</h3>
+      <p>{{ activity.description }}</p>
+
+      <div *ngIf="activity.instructions" class="instructions">
+        <h3>Instrucciones</h3>
+        <pre>{{ activity.instructions }}</pre>
+      </div>
+
+      <div *ngIf="activity.attachments?.length" class="attachments">
+        <h3>Archivos adjuntos</h3>
+        <ion-list>
+          <ion-item *ngFor="let file of activity.attachments">
+            <ion-icon slot="start" [name]="getFileIcon(file.type)"></ion-icon>
+            <ion-label>
+              <h4>{{ file.name }}</h4>
+              <p>{{ file.size }}</p>
+            </ion-label>
+            <ion-button slot="end" fill="clear" size="small">
+              <ion-icon name="download"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div *ngIf="activity.type === 'assignment' || activity.type === 'project'" class="submission">
+        <h3>Tu entrega</h3>
+
+        <ion-textarea *ngIf="!activity.completed"
+                      [(ngModel)]="activity.submission"
+                      placeholder="Escribe tu respuesta aquí..."
+                      rows="6"
+                      autoGrow="true"></ion-textarea>
+
+        <div *ngIf="activity.completed" class="submitted">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>Entregado</span>
+        </div>
+
+        <ion-button *ngIf="!activity.completed"
+                   expand="block"
+                   (click)="submitAssignment()"
+                   class="submit-button">
+          Enviar Tarea
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

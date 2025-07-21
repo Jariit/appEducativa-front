@@ -1,0 +1,29 @@
+/* resultados-tests.component.scss */
+ion-list {
+  margin-bottom: 24px;
+
+  ion-list-header {
+    background: var(--ion-color-light);
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+
+    ion-label {
+      h2 {
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+
+  ion-item {
+    --border-radius: 0;
+
+    &:last-child {
+      --border-radius: 0 0 8px 8px;
+    }
+  }
+}

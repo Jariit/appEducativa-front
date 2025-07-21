@@ -1,0 +1,48 @@
+<!-- cursos-disponibles.component.html -->
+
+<app-header></app-header>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mis Cursos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/estudiante/resultados">
+        <ion-icon slot="icon-only" name="trophy"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="welcome-section">
+    <h1>Bienvenido, Estudiante</h1>
+    <p>Continúa tu aprendizaje donde lo dejaste</p>
+  </div>
+
+  <ion-list>
+    <ion-item *ngFor="let course of courses"
+              class="course-card"
+              [routerLink]="['/estudiante/curso', course.id]">
+      <ion-thumbnail slot="start">
+        <img [src]="course.image" alt="{{ course.title }}">
+      </ion-thumbnail>
+
+      <ion-label>
+        <h2>{{ course.title }}</h2>
+        <p>{{ course.teacher }}</p>
+
+        <div class="progress-container">
+          <ion-progress-bar [value]="course.progress / 100"></ion-progress-bar>
+          <span>{{ course.progress }}% completado</span>
+        </div>
+
+        <div class="course-meta">
+          <ion-chip *ngIf="course.pendingTasks > 0" color="warning">
+            <ion-icon name="alert-circle"></ion-icon>
+            <ion-label>{{ course.pendingTasks }} tareas pendientes</ion-label>
+          </ion-chip>
+          <ion-note>Último acceso: {{ formatLastAccessed(course.lastAccessed) }}</ion-note>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

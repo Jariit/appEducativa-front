@@ -1,0 +1,56 @@
+<!-- gestion-actividades.component.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profesor/cursos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Actividades del Módulo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let actividad of actividades">
+      <ion-icon slot="start"
+                [name]="getIconoActividad(actividad.tipo)"
+                [color]="actividad.completada ? 'success' : 'primary'"></ion-icon>
+      <ion-label>
+        <h2>{{ actividad.titulo }}</h2>
+        <p>{{ actividad.tipo | titlecase }}</p>
+        <p *ngIf="actividad.fechaLimite">Fecha límite: {{ actividad.fechaLimite | date }}</p>
+      </ion-label>
+      <ion-badge slot="end" [color]="actividad.completada ? 'success' : 'warning'">
+        {{ actividad.completada ? 'Completada' : 'Pendiente' }}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>Agregar Actividad</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Título</ion-label>
+        <ion-input [(ngModel)]="nuevaActividad.titulo"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Tipo</ion-label>
+        <ion-select [(ngModel)]="nuevaActividad.tipo">
+          <ion-select-option *ngFor="let tipo of tiposActividad" [value]="tipo.value">
+            {{ tipo.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-textarea [(ngModel)]="nuevaActividad.descripcion" rows="3"></ion-textarea>
+      </ion-item>
+      <ion-item *ngIf="nuevaActividad.tipo !== 'lectura'">
+        <ion-label position="floating">Fecha límite</ion-label>
+        <ion-input type="date" [(ngModel)]="nuevaActividad.fechaLimite"></ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="agregarActividad()">Agregar Actividad</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

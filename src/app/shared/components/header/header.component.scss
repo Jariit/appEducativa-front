@@ -1,0 +1,139 @@
+/* Estilos base del header */
+ion-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  width: 100%;
+
+  ion-toolbar {
+    --min-height: 64px;
+    padding: 0 16px;
+
+    /* Estilos para el logo */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      margin-left: 12px;
+
+      .logo {
+        height: 32px;
+        margin-right: 8px;
+      }
+
+      .app-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  /* Barra de progreso */
+  ion-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Menú de perfil mejorado */
+.profile-container {
+  position: relative;
+  height: 100%;
+
+  .profile-menu {
+    position: fixed; /* Cambiado de absolute a fixed */
+    top: 64px; /* Ajustar según altura del header */
+    right: 16px;
+    z-index: 1100;
+    width: 220px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.2s ease-out forwards;
+    overflow: hidden;
+
+    .menu-item {
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --min-height: 48px;
+    }
+  }
+
+  /* En tu archivo header.component.scss */
+
+ion-avatar.avatar-icon-container {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-light);
+  border-radius: 50%;
+
+  .avatar-icon {
+    font-size: 24px; /* Tamaño consistente con otros íconos */
+    color: var(--ion-color-medium);
+    margin: 0; /* Elimina márgenes por defecto */
+  }
+}
+
+/* Ajuste para alinear verticalmente todo el grupo de perfil */
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  ion-avatar {
+    margin-right: 8px; /* Espacio entre avatar y texto */
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  ion-icon[name="chevron-down-outline"] {
+    font-size: 16px;
+    margin-left: 4px;
+    transition: transform 0.3s ease;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+}
+}
+
+/* Animación para el menú desplegable */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  ion-header ion-toolbar {
+    --min-height: 56px;
+    padding: 0 8px;
+
+    .app-name {
+      display: none;
+    }
+  }
+
+  .profile-container .profile-menu {
+    top: 56px;
+    right: 8px;
+    width: 200px;
+  }
+}

@@ -1,0 +1,53 @@
+<!-- revision-tareas.component.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Tareas por Revisar</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="filtro.estado = filtro.estado === 'pendiente' ? 'calificado' : 'pendiente'">
+        <ion-icon slot="icon-only" [name]="filtro.estado === 'pendiente' ? 'time' : 'checkmark-done'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="filtro.curso" placeholder="Filtrar por curso"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item-sliding *ngFor="let tarea of tareas | filtroTareas:filtro">
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <h2>{{ tarea.actividad }}</h2>
+          <p>{{ tarea.estudiante }} • {{ tarea.curso }}</p>
+          <p>
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ tarea.enviada | date:'mediumDate' }}
+          </p>
+          <ion-button fill="clear" size="small" (click)="descargarArchivo(tarea.archivo)">
+            <ion-icon name="download" slot="start"></ion-icon>
+            {{ tarea.archivo }}
+          </ion-button>
+        </ion-label>
+
+        <ion-badge slot="end" [color]="tarea.estado === 'pendiente' ? 'warning' : 'success'">
+          {{ tarea.estado === 'pendiente' ? 'Pendiente' : tarea.calificacion + '/100' }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="mostrarOpcionesCalificacion(tarea)">
+          <ion-icon name="pencil" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-card *ngIf="(tareas | filtroTareas:filtro).length === 0">
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="checkmark-done-circle" size="large"></ion-icon>
+      <p>No hay tareas {{ filtro.estado === 'pendiente' ? 'pendientes' : 'calificadas' }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

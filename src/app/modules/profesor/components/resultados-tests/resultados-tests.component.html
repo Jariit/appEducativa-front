@@ -1,0 +1,43 @@
+<!-- resultados-tests.component.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Resultados de Tests</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="filtroCurso">
+      <ion-segment-button value="">
+        <ion-label>Todos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button *ngFor="let curso of cursosUnicos" [value]="curso">
+        <ion-label>{{ curso }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngFor="let test of resultados | filtroCurso:filtroCurso">
+    <ion-list-header (click)="crearGrafico(test)">
+      <ion-label>
+        <h2>{{ test.test }}</h2>
+        <p>{{ test.curso }} • {{ test.fecha | date }} • Promedio: {{ test.promedio }}</p>
+      </ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let estudiante of test.estudiantes"
+              [routerLink]="['/profesor/estudiantes', estudiante.id]">
+      <ion-avatar slot="start">
+        <img [src]="'assets/avatars/' + estudiante.id + '.jpg'" alt="{{ estudiante.nombre }}">
+      </ion-avatar>
+      <ion-label>{{ estudiante.nombre }}</ion-label>
+      <ion-badge slot="end" [color]="getColorCalificacion(estudiante.calificacion)">
+        {{ estudiante.calificacion }}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <div class="chart-container">
+    <canvas id="graficoTest"></canvas>
+  </div>
+</ion-content>

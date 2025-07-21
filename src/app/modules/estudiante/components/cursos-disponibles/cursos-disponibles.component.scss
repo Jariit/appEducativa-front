@@ -1,0 +1,90 @@
+/* cursos-disponibles.component.scss */
+.welcome-section {
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+.no-courses {
+  text-align: center;
+  padding: 40px;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+}
+
+.course-card {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --background: white;
+
+  ion-thumbnail {
+    width: 100px;
+    height: 70px;
+
+    img {
+      border-radius: 8px 0 0 8px;
+      object-fit: cover;
+    }
+  }
+
+  h2 {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ion-color-dark);
+  }
+
+  .progress-container {
+    margin: 8px 0;
+
+    ion-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+    }
+
+    span {
+      font-size: 0.8rem;
+      color: var(--ion-color-medium);
+      display: block;
+      text-align: right;
+    }
+  }
+
+  .course-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+
+    ion-chip {
+      margin: 0;
+      height: 24px;
+      font-size: 0.7rem;
+
+      ion-icon {
+        font-size: 0.8rem;
+      }
+    }
+
+    ion-note {
+      font-size: 0.7rem;
+      color: var(--ion-color-medium);
+    }
+  }
+}

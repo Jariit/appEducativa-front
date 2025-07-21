@@ -1,0 +1,36 @@
+<!-- resultados.component.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/estudiante/cursos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Resultados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let result of results" class="result-item">
+      <ion-label>
+        <h2>{{ result.course }}</h2>
+        <p>{{ result.teacher }}</p>
+
+        <div class="overall-score">
+          <ion-badge [color]="getScoreColor(result.score)">
+            {{ result.score }}/100
+          </ion-badge>
+          <ion-note>Fecha: {{ result.date | date }}</ion-note>
+        </div>
+
+        <div class="modules-list">
+          <ion-item *ngFor="let module of result.modules" lines="none">
+            <ion-label>{{ module.name }}</ion-label>
+            <ion-badge slot="end" [color]="getScoreColor(module.score)">
+              {{ module.score }}
+            </ion-badge>
+          </ion-item>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

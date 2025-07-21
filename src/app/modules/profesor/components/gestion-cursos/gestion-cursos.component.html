@@ -1,0 +1,28 @@
+<!-- gestion-cursos.component.html -->
+<app-header></app-header>
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Gestión de Cursos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModalCrearCurso()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let curso of cursos" [routerLink]="['/profesor/cursos', curso.id, 'modulos']">
+      <ion-label>
+        <h2>{{ curso.titulo }}</h2>
+        <p>{{ curso.estudiantes }} estudiantes</p>
+        <p>Del {{ curso.fechaInicio | date }} al {{ curso.fechaFin | date }}</p>
+      </ion-label>
+      <ion-badge slot="end" [color]="curso.estado === 'activo' ? 'success' : 'warning'">
+        {{ curso.estado }}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+</ion-content>

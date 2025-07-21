@@ -1,0 +1,100 @@
+/* curso-detalle.component.scss */
+.course-header {
+  ion-card-header {
+    position: relative;
+    padding-top: 0;
+
+    ion-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    ion-card-subtitle {
+      font-size: 1rem;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --min-height: 32px;
+
+    ion-icon {
+      color: var(--ion-color-primary);
+    }
+  }
+
+  .progress-summary {
+    margin-top: 16px;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    ion-progress-bar {
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    span {
+      display: block;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin-top: 4px;
+    }
+  }
+}
+
+ion-list {
+  margin-top: 24px;
+  background: transparent;
+
+  ion-item {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --border-radius: 8px;
+    margin-bottom: 12px;
+    --background: var(--ion-color-light);
+
+    &.completed {
+      --background: rgba(var(--ion-color-success-rgb), 0.1);
+    }
+
+    h2 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin: 4px 0;
+    }
+
+    .module-progress {
+      margin-top: 8px;
+
+      ion-progress-bar {
+        height: 4px;
+      }
+
+      span {
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+        display: block;
+        text-align: right;
+      }
+    }
+  }
+}

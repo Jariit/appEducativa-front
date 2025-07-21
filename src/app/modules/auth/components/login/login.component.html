@@ -1,0 +1,36 @@
+<ion-content class="ion-padding">
+  <div class="form-container">
+    <ion-img src="../../../../../assets//logo.avif" class="ion-margin-bottom" style="max-width: 150px; margin: 0 auto;"></ion-img>
+
+    <ion-card class="custom-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Iniciar Sesión</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form (ngSubmit)="login()">
+          <ion-item class="form-input">
+            <ion-label position="floating">Correo Electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="credentials.email" name="email" required></ion-input>
+          </ion-item>
+
+          <ion-item class="form-input">
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="credentials.password" name="password" required></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="action-button ion-margin-top">
+            Iniciar Sesión
+          </ion-button>
+        </form>
+
+        <div class="ion-text-center ion-margin-top">
+          <p>
+            ¿No tienes una cuenta?
+            <a routerLink="/register">Regístrate</a>
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

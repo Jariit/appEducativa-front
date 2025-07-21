@@ -1,0 +1,68 @@
+/* modulo-detalle.component.scss */
+.module-header {
+  ion-card-header {
+    ion-card-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    ion-card-subtitle {
+      font-size: 1rem;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  .progress-summary {
+    ion-progress-bar {
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    span {
+      display: block;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin-top: 4px;
+    }
+  }
+}
+
+ion-list {
+  margin-top: 24px;
+  background: transparent;
+
+  ion-item {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --border-radius: 8px;
+    margin-bottom: 12px;
+    --background: var(--ion-color-light);
+
+    &.completed {
+      --background: rgba(var(--ion-color-success-rgb), 0.1);
+    }
+
+    h2 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+
+      ion-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}

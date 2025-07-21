@@ -1,0 +1,91 @@
+/* actividad-detalle.component.scss */
+ion-card {
+  ion-card-header {
+    ion-card-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    ion-card-subtitle {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+
+      ion-icon {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    color: var(--ion-color-primary);
+  }
+
+  .instructions {
+    background: rgba(var(--ion-color-light-rgb), 0.5);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+
+    pre {
+      white-space: pre-wrap;
+      font-family: inherit;
+      margin: 0;
+    }
+  }
+
+  .attachments {
+    ion-list {
+      background: transparent;
+
+      ion-item {
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        --border-radius: 8px;
+        margin-bottom: 8px;
+
+        h4 {
+          font-size: 0.9rem;
+          font-weight: 500;
+          margin-bottom: 2px;
+        }
+
+        p {
+          font-size: 0.8rem;
+          color: var(--ion-color-medium);
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .submission {
+    margin-top: 24px;
+
+    ion-textarea {
+      background: var(--ion-color-light);
+      border-radius: 8px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      margin-bottom: 16px;
+    }
+
+    .submitted {
+      display: flex;
+      align-items: center;
+      color: var(--ion-color-success);
+      font-weight: 500;
+
+      ion-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .submit-button {
+      margin-top: 16px;
+    }
+  }
+}

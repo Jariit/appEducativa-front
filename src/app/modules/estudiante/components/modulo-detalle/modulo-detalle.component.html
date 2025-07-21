@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/estudiante/curso/1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ module.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card class="module-header">
+    <ion-card-header>
+      <ion-card-title>{{ module.title }}</ion-card-title>
+      <ion-card-subtitle>{{ module.course }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ module.description }}</p>
+
+      <div class="progress-summary">
+        <ion-progress-bar [value]="module.progress / 100"></ion-progress-bar>
+        <span>{{ module.progress }}% completado</span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Actividades del módulo</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let activity of module.activities"
+              detail="true"
+              [routerLink]="['/estudiante/actividad', activity.id]"
+              [class.completed]="activity.completed">
+      <ion-icon
+        slot="start"
+        [name]="getActivityIcon(activity.type)"
+        [color]="activity.completed ? 'success' : 'primary'">
+      </ion-icon>
+
+      <ion-label>
+        <h2>{{ activity.title }}</h2>
+        <p *ngIf="activity.type === 'lecture'">
+          <ion-icon name="time-outline"></ion-icon> {{ activity.duration }}
+          <span *ngIf="activity.resources"> • {{ activity.resources }} recursos</span>
+        </p>
+        <p *ngIf="activity.type === 'assignment' || activity.type === 'project'">
+          <ion-icon name="calendar-outline"></ion-icon> Entrega: {{ formatDueDate(activity.dueDate) }}
+          <span *ngIf="activity.completed"> • Calificación: {{ activity.score }}/100</span>
+        </p>
+      </ion-label>
+
+      <ion-icon
+        *ngIf="activity.completed"
+        slot="end"
+        name="checkmark-circle"
+        color="success">
+      </ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>
