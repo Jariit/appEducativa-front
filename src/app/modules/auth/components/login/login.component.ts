@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -15,12 +15,15 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [IonicModule, FormsModule, CommonModule, RouterModule, HttpClientModule]
 })
 export class LoginComponent {
+  @ViewChild('loginForm') loginForm!: NgForm;
+
   credentials = {
     email: '',
     password: ''
   };
 
   isLoading = false;
+  showPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -28,7 +31,15 @@ export class LoginComponent {
     private alertController: AlertController
   ) {}
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   async login() {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     this.isLoading = true;
 
     try {
@@ -40,6 +51,7 @@ export class LoginComponent {
       if (response?.success) {
         const user = this.authService.getCurrentUser();
 
+        // Redirección basada en el rol
         if (this.authService.isStudent()) {
           this.router.navigate(['/estudiante']);
         } else if (this.authService.isTeacher()) {
@@ -54,6 +66,7 @@ export class LoginComponent {
         await this.showAlert('Error', response?.message || 'Credenciales incorrectas');
       }
     } catch (error) {
+      console.error('Login error:', error);
       await this.showAlert('Error', 'Ocurrió un error al intentar iniciar sesión');
     } finally {
       this.isLoading = false;
@@ -64,7 +77,8 @@ export class LoginComponent {
     const alert = await this.alertController.create({
       header,
       message,
-      buttons: ['OK']
+      buttons: ['OK'],
+      cssClass: 'custom-alert'
     });
     await alert.present();
   }

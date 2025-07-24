@@ -1,73 +1,186 @@
 <!-- actividad-detalle.component.html -->
-
-<!-- Reemplaza los headers existentes en tus componentes de estudiante -->
-<!-- Reemplaza los headers existentes por: -->
-<app-header></app-header>
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="barra-superior">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/estudiante/modulo/1"></ion-back-button>
+      <ion-back-button [defaultHref]="getModuleRoute()"
+                      text="Volver"
+                      icon="arrow-back-outline"
+                      class="boton-retroceder"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ activity.title }}</ion-title>
+    <ion-title class="titulo-toolbar">{{ activity?.title }}</ion-title>
+    <ion-buttons slot="end" *ngIf="activity?.completed">
+      <ion-icon name="checkmark-circle" color="success" class="icono-estado"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ activity.title }}</ion-card-title>
-      <ion-card-subtitle *ngIf="activity.dueDate">
-        <ion-icon name="calendar-outline"></ion-icon>
-        Fecha límite: {{ activity.dueDate | date }}
-      </ion-card-subtitle>
-    </ion-card-header>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <ion-card class="tarjeta-actividad-detalle">
+      <ion-card-header>
+        <ion-card-title class="titulo-actividad">{{ activity?.title }}</ion-card-title>
+        <ion-card-subtitle class="subtitulo-actividad">
+          <div class="detalles-superiores">
+            <span *ngIf="activity?.duration">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ activity?.duration }}
+            </span>
+            <span *ngIf="activity?.dueDate">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ activity?.dueDate | date:'mediumDate' }}
+            </span>
+            <span *ngIf="activity?.score" class="calificacion">
+              <ion-icon name="ribbon-outline"></ion-icon>
+              {{ activity?.score }}/100
+            </span>
+          </div>
+        </ion-card-subtitle>
+      </ion-card-header>
 
-    <ion-card-content>
-      <h3>Descripción</h3>
-      <p>{{ activity.description }}</p>
-
-      <div *ngIf="activity.instructions" class="instructions">
-        <h3>Instrucciones</h3>
-        <pre>{{ activity.instructions }}</pre>
-      </div>
-
-      <div *ngIf="activity.attachments?.length" class="attachments">
-        <h3>Archivos adjuntos</h3>
-        <ion-list>
-          <ion-item *ngFor="let file of activity.attachments">
-            <ion-icon slot="start" [name]="getFileIcon(file.type)"></ion-icon>
-            <ion-label>
-              <h4>{{ file.name }}</h4>
-              <p>{{ file.size }}</p>
-            </ion-label>
-            <ion-button slot="end" fill="clear" size="small">
-              <ion-icon name="download"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </ion-list>
-      </div>
-
-      <div *ngIf="activity.type === 'assignment' || activity.type === 'project'" class="submission">
-        <h3>Tu entrega</h3>
-
-        <ion-textarea *ngIf="!activity.completed"
-                      [(ngModel)]="activity.submission"
-                      placeholder="Escribe tu respuesta aquí..."
-                      rows="6"
-                      autoGrow="true"></ion-textarea>
-
-        <div *ngIf="activity.completed" class="submitted">
-          <ion-icon name="checkmark-circle" color="success"></ion-icon>
-          <span>Entregado</span>
+      <ion-card-content>
+        <!-- Sección Descripción - Ahora siempre visible -->
+        <div class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="document-text-outline" class="icono-seccion"></ion-icon>
+            Descripción
+          </h3>
+          <div class="contenido-seccion">
+            <p>{{ activity?.description || 'Esta actividad no tiene descripción detallada.' }}</p>
+          </div>
         </div>
 
-        <ion-button *ngIf="!activity.completed"
-                   expand="block"
-                   (click)="submitAssignment()"
-                   class="submit-button">
-          Enviar Tarea
-        </ion-button>
-      </div>
-    </ion-card-content>
-  </ion-card>
+        <!-- Sección Contenido -->
+        <div *ngIf="activity?.content" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="book-outline" class="icono-seccion"></ion-icon>
+            Contenido
+          </h3>
+          <div class="contenido-seccion contenido-textual">
+            <pre>{{ activity?.content }}</pre>
+          </div>
+        </div>
+
+        <!-- Sección Instrucciones -->
+        <div *ngIf="activity?.instructions" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="list-outline" class="icono-seccion"></ion-icon>
+            Instrucciones
+          </h3>
+          <div class="contenido-seccion contenido-textual">
+            <pre>{{ activity?.instructions }}</pre>
+          </div>
+        </div>
+
+        <!-- Sección Ejemplos de Código -->
+        <div *ngIf="activity?.codeExamples" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="code-slash-outline" class="icono-seccion"></ion-icon>
+            Ejemplos de Código
+          </h3>
+          <div class="contenido-seccion">
+            <div class="ejemplo-codigo" *ngFor="let example of activity?.codeExamples">
+              <pre><code>{{ example }}</code></pre>
+              <ion-button fill="clear" size="small" (click)="copiarCodigo(example)">
+                <ion-icon name="copy-outline" slot="start"></ion-icon>
+                Copiar
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Recursos Adjuntos -->
+        <div *ngIf="activity?.attachments?.length" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="document-attach-outline" class="icono-seccion"></ion-icon>
+            Recursos Adjuntos
+          </h3>
+          <div class="contenido-seccion">
+            <ion-list lines="none" class="lista-recursos">
+              <ion-item *ngFor="let file of activity?.attachments" class="recurso-item">
+                <ion-icon slot="start" [name]="getFileIcon(file.type)" color="primary" class="icono-recurso"></ion-icon>
+                <ion-label class="info-recurso">
+                  <h4>{{ file.name }}</h4>
+                  <p>{{ file.size }}</p>
+                </ion-label>
+                <ion-button slot="end" fill="clear" (click)="descargarRecurso(file)" class="boton-descarga">
+                  <ion-icon name="download-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+
+        <!-- Sección Video -->
+        <div *ngIf="activity?.videoUrl" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="videocam-outline" class="icono-seccion"></ion-icon>
+            Video de la Clase
+          </h3>
+          <div class="contenido-seccion">
+            <div class="contenedor-video">
+              <ion-button expand="block" color="primary" (click)="verVideo()" class="boton-video">
+                <ion-icon slot="start" name="play-circle"></ion-icon>
+                Ver Video
+              </ion-button>
+              <ion-note>Duración: {{activity.duration}}</ion-note>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Ejemplo Interactivo -->
+        <div *ngIf="activity?.interactiveExample" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="code-working-outline" class="icono-seccion"></ion-icon>
+            Ejemplo Interactivo
+          </h3>
+          <div class="contenido-seccion">
+            <div class="contenedor-interactivo">
+              <ion-button expand="block" color="tertiary" (click)="abrirEjemploInteractivo()">
+                <ion-icon slot="start" name="open-outline"></ion-icon>
+                Abrir en nueva ventana
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Entrega -->
+        <div *ngIf="activity?.type === 'assignment' || activity?.type === 'project'" class="seccion">
+          <h3 class="titulo-seccion">
+            <ion-icon name="send-outline" class="icono-seccion"></ion-icon>
+            Tu Entrega
+          </h3>
+          <div class="contenido-seccion">
+            <div class="contenedor-entrega">
+              <div *ngIf="!activity?.completed" class="formulario-entrega">
+                <ion-textarea [(ngModel)]="submissionText"
+                             placeholder="Escribe tu respuesta aquí..."
+                             autoGrow="true"
+                             rows="6"
+                             class="campo-texto"></ion-textarea>
+
+                <ion-button expand="block"
+                            color="primary"
+                            (click)="submitAssignment()"
+                            class="boton-enviar">
+                  <ion-icon slot="start" name="send"></ion-icon>
+                  Enviar Tarea
+                </ion-button>
+              </div>
+
+              <div *ngIf="activity?.completed" class="entrega-completada">
+                <ion-icon name="checkmark-done-circle" color="success" class="icono-completado"></ion-icon>
+                <div class="detalles-entrega">
+                  <p class="fecha-entrega">Entregado el {{ activity?.submissionDate | date:'medium' }}</p>
+                  <p *ngIf="activity?.score" class="puntuacion">
+                    <ion-icon name="ribbon-outline" color="success"></ion-icon>
+                    Calificación: {{ activity?.score }}/100
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

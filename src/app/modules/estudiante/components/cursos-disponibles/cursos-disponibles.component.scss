@@ -1,90 +1,223 @@
 /* cursos-disponibles.component.scss */
-.welcome-section {
-  margin-bottom: 24px;
+.fondo-contenido {
+  --background: var(--fondo-pagina);
+}
 
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--ion-color-primary);
+.contenedor-principal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Sección de bienvenida */
+.seccion-bienvenida {
+  margin-bottom: 32px;
+  animation: aparecer 0.5s ease-out;
+
+  .titulo-bienvenida {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primario);
     margin-bottom: 8px;
   }
 
-  p {
-    color: var(--ion-color-medium);
-    margin: 0;
+  .subtitulo-bienvenida {
+    color: var(--color-texto-secundario);
+    margin-top: 0;
+    font-size: 1.1rem;
   }
 }
 
-.no-courses {
-  text-align: center;
-  padding: 40px;
-  color: var(--ion-color-medium);
+.tarjeta-resumen {
+  display: flex;
+  justify-content: space-between;
+  background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
-  ion-icon {
-    font-size: 3rem;
-    margin-bottom: 16px;
+  .item-resumen {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .icono-resumen {
+      font-size: 1.8rem;
+      color: var(--color-primario);
+      background: rgba(var(--color-primario-rgb), 0.1);
+      padding: 12px;
+      border-radius: 50%;
+    }
+
+    .valor-resumen {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-texto);
+      display: block;
+      line-height: 1;
+    }
+
+    .etiqueta-resumen {
+      font-size: 0.9rem;
+      color: var(--color-texto-secundario);
+    }
   }
 }
 
-.course-card {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  margin-bottom: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --background: white;
+/* Sección de cursos */
+.seccion-cursos {
+  .cabecera-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 
-  ion-thumbnail {
-    width: 100px;
-    height: 70px;
+    .titulo-seccion {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-texto);
+      margin: 0;
+    }
+  }
+}
 
-    img {
-      border-radius: 8px 0 0 8px;
+.lista-cursos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.tarjeta-curso {
+  --background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 0;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .contenedor-imagen {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+
+    .imagen-curso {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .badge-progreso {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
   }
 
-  h2 {
+  .titulo-curso {
+    font-size: 1.2rem;
     font-weight: 600;
+    color: var(--color-texto);
     margin-bottom: 4px;
-    color: var(--ion-color-dark);
   }
 
-  .progress-container {
-    margin: 8px 0;
+  .profesor-curso {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+  }
+
+  .barra-progreso {
+    margin: 12px 0;
 
     ion-progress-bar {
       height: 6px;
       border-radius: 3px;
     }
-
-    span {
-      font-size: 0.8rem;
-      color: var(--ion-color-medium);
-      display: block;
-      text-align: right;
-    }
   }
 
-  .course-meta {
+  .metadatos-curso {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 8px;
 
-    ion-chip {
-      margin: 0;
-      height: 24px;
-      font-size: 0.7rem;
+    .badge-tareas {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
 
       ion-icon {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
       }
     }
 
-    ion-note {
-      font-size: 0.7rem;
-      color: var(--ion-color-medium);
+    .ultimo-acceso {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: var(--color-texto-secundario);
+
+      .icono-fecha {
+        font-size: 0.9rem;
+      }
     }
+  }
+}
+
+.sin-cursos {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--fondo-tarjeta);
+  border-radius: 16px;
+
+  .icono-sin-cursos {
+    font-size: 3rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 20px;
+  }
+}
+
+/* Animaciones */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tarjeta-resumen {
+    flex-direction: column;
+    gap: 20px;
+
+    .item-resumen {
+      justify-content: flex-start;
+    }
+  }
+
+  .lista-cursos {
+    grid-template-columns: 1fr;
   }
 }

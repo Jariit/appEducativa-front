@@ -1,100 +1,302 @@
 /* curso-detalle.component.scss */
-.course-header {
-  ion-card-header {
-    position: relative;
-    padding-top: 0;
+/* Estilos para la barra superior */
+.barra-superior {
+  --background: var(--color-primario);
+  --color: white;
 
-    ion-card-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    ion-card-subtitle {
-      font-size: 1rem;
-      color: var(--ion-color-medium);
-    }
+  .boton-retroceder {
+    --color: white;
+    --icon-font-size: 1.4rem;
   }
 
-  img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
+  .titulo-toolbar {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-inline: 0;
   }
 
-  ion-item {
-    --padding-start: 0;
-    --inner-padding-end: 0;
-    --min-height: 32px;
-
+  .boton-accion {
+    --color: white;
+    --padding-end: 8px;
     ion-icon {
-      color: var(--ion-color-primary);
-    }
-  }
-
-  .progress-summary {
-    margin-top: 16px;
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    ion-progress-bar {
-      height: 8px;
-      border-radius: 4px;
-    }
-
-    span {
-      display: block;
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--ion-color-medium);
-      margin-top: 4px;
+      font-size: 1.4rem;
     }
   }
 }
 
-ion-list {
-  margin-top: 24px;
-  background: transparent;
+.fondo-contenido {
+  --background: #f9f9f9;
+}
 
-  ion-item {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    --border-radius: 8px;
-    margin-bottom: 12px;
-    --background: var(--ion-color-light);
+.contenedor-principal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
 
-    &.completed {
-      --background: rgba(var(--ion-color-success-rgb), 0.1);
+/* Portada del curso */
+.portada-curso {
+  position: relative;
+  margin-bottom: 24px;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+
+  .contenedor-imagen {
+    height: 200px;
+    position: relative;
+
+    .imagen-curso {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    h2 {
+    .overlay-imagen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+    }
+
+    .badge-progreso {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+
+      ion-badge {
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+    }
+  }
+
+  .informacion-profesor {
+    position: absolute;
+    bottom: -25px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2;
+
+    .avatar-profesor {
+      width: 50px;
+      height: 50px;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .texto-profesor {
+      color: white;
+      font-size: 0.8rem;
+      margin: 0;
+      opacity: 0.8;
+    }
+
+    .nombre-profesor {
+      color: white;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin: 0;
+    }
+  }
+}
+
+/* Tarjeta de detalles */
+.tarjeta-detalles {
+  --background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 32px 16px 16px;
+
+  .descripcion-curso {
+    color: var(--color-texto);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .detalles-adicionales {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+
+    .detalle-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--color-texto-secundario);
+
+      .icono-detalle {
+        color: var(--color-primario);
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+/* Barra de progreso global */
+.barra-progreso-global {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+  .texto-progreso {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+
+    span:first-child {
+      color: var(--color-texto-secundario);
+    }
+
+    span:last-child {
+      font-weight: 600;
+      color: var(--color-primario);
+    }
+  }
+
+  ion-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  ion-note {
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+    display: block;
+    text-align: right;
+  }
+}
+
+/* Sección de módulos */
+.seccion-modulos {
+  margin-top: 24px;
+  padding: 0 16px;
+
+  .titulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin-bottom: 16px;
+
+    .icono-seccion {
+      color: var(--color-primario);
+    }
+  }
+
+  .sin-modulos {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 16px;
+
+    .icono-sin-modulos {
+      font-size: 3rem;
+      color: var(--color-texto-secundario);
+      margin-bottom: 16px;
     }
 
     p {
-      font-size: 0.9rem;
-      color: var(--ion-color-medium);
-      margin: 4px 0;
+      color: var(--color-texto-secundario);
+      margin: 0;
+    }
+  }
+}
+
+/* Lista de módulos */
+.lista-modulos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.tarjeta-modulo {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+
+  &.completado {
+    border-left: 4px solid var(--ion-color-success);
+  }
+
+  .estado-modulo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+
+    ion-icon {
+      font-size: 1rem;
     }
 
-    .module-progress {
-      margin-top: 8px;
+    .texto-estado {
+      font-size: 0.8rem;
+      color: var(--color-texto-secundario);
+    }
+  }
 
-      ion-progress-bar {
-        height: 4px;
-      }
+  .titulo-modulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin: 0 0 8px;
+  }
 
-      span {
-        font-size: 0.8rem;
-        color: var(--ion-color-medium);
-        display: block;
-        text-align: right;
+  .descripcion-modulo {
+    font-size: 0.9rem;
+    color: var(--color-texto-secundario);
+    margin: 0 0 12px;
+    line-height: 1.4;
+  }
+
+  .progreso-modulo {
+    .texto-progreso {
+      display: block;
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--color-texto-secundario);
+      margin-bottom: 4px;
+    }
+
+    ion-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .portada-curso {
+    .informacion-profesor {
+      .nombre-profesor {
+        font-size: 1rem;
       }
+    }
+  }
+
+  .tarjeta-detalles {
+    .detalles-adicionales {
+      grid-template-columns: 1fr;
     }
   }
 }

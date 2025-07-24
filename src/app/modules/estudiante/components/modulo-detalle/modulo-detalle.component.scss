@@ -1,68 +1,233 @@
 /* modulo-detalle.component.scss */
-.module-header {
-  ion-card-header {
-    ion-card-title {
+/* Estilos para la barra superior (coherente con curso-detalle) */
+.barra-superior {
+  --background: var(--color-primario);
+  --color: white;
+
+  .boton-retroceder {
+    --color: white;
+    --icon-font-size: 1.4rem;
+  }
+
+  .titulo-toolbar {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-inline: 0;
+  }
+
+  .boton-accion {
+    --color: white;
+    --padding-end: 8px;
+    ion-icon {
       font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    ion-card-subtitle {
-      font-size: 1rem;
-      color: var(--ion-color-medium);
-    }
-  }
-
-  p {
-    margin-bottom: 16px;
-  }
-
-  .progress-summary {
-    ion-progress-bar {
-      height: 8px;
-      border-radius: 4px;
-    }
-
-    span {
-      display: block;
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--ion-color-medium);
-      margin-top: 4px;
     }
   }
 }
 
-ion-list {
-  margin-top: 24px;
-  background: transparent;
+.fondo-contenido {
+  --background: #f9f9f9;
+}
 
-  ion-item {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    --border-radius: 8px;
-    margin-bottom: 12px;
-    --background: var(--ion-color-light);
+.contenedor-principal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
 
-    &.completed {
-      --background: rgba(var(--ion-color-success-rgb), 0.1);
+/* Tarjeta de encabezado del módulo */
+.tarjeta-modulo-header {
+  --background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 16px;
+
+  .titulo-modulo {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin-bottom: 4px;
+  }
+
+  .subtitulo-modulo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    color: var(--color-primario);
+
+    ion-icon {
+      font-size: 1.1rem;
+    }
+  }
+
+  .descripcion-modulo {
+    color: var(--color-texto);
+    line-height: 1.6;
+    margin: 12px 0 16px;
+  }
+}
+
+/* Barra de progreso del módulo */
+.barra-progreso-modulo {
+  .texto-progreso {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+
+    span:first-child {
+      color: var(--color-texto-secundario);
     }
 
-    h2 {
+    span:last-child {
       font-weight: 600;
-      margin-bottom: 4px;
+      color: var(--color-primario);
+    }
+  }
+
+  ion-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  ion-note {
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+    display: block;
+    text-align: right;
+  }
+}
+
+/* Sección de actividades */
+.seccion-actividades {
+  margin-top: 24px;
+  padding: 0 16px;
+
+  .titulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin-bottom: 16px;
+
+    .icono-seccion {
+      color: var(--color-primario);
+    }
+  }
+
+  .sin-actividades {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 16px;
+
+    .icono-sin-actividades {
+      font-size: 3rem;
+      color: var(--color-texto-secundario);
+      margin-bottom: 16px;
     }
 
     p {
-      font-size: 0.9rem;
-      color: var(--ion-color-medium);
-      margin: 4px 0;
+      color: var(--color-texto-secundario);
+      margin: 0;
+    }
+  }
+}
+
+/* Lista de actividades */
+.lista-actividades {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.tarjeta-actividad {
+  --background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+
+  &.completada {
+    border-left: 4px solid var(--ion-color-success);
+  }
+
+  .encabezado-actividad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .icono-tipo {
+      font-size: 1.8rem;
+    }
+
+    .estado-actividad {
       display: flex;
       align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--color-texto-secundario);
 
       ion-icon {
-        margin-right: 4px;
+        font-size: 1rem;
       }
+    }
+  }
+
+  .titulo-actividad {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin: 0 0 12px;
+  }
+
+  .detalles-actividad {
+    .detalle-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--color-texto-secundario);
+
+      ion-icon {
+        font-size: 1rem;
+        color: var(--color-primario);
+      }
+
+      .recursos, .calificacion {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: 12px;
+
+        ion-icon {
+          font-size: 0.9rem;
+        }
+      }
+
+      .calificacion {
+        color: var(--ion-color-success);
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tarjeta-modulo-header {
+    margin: 16px 0;
+
+    .titulo-modulo {
+      font-size: 1.2rem;
     }
   }
 }

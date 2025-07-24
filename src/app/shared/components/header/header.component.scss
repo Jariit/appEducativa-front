@@ -1,139 +1,294 @@
-/* Estilos base del header */
+/* header.component.scss */
+:host {
+  display: block;
+   position: relative; /* Establece un contexto de apilamiento */
+  z-index: 1000;
+  --header-height: 60px;
+  --progress-bar-height: 3px;
+}
+
 ion-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* Asegura que esté por encima de otros elementos */
-  width: 100%;
-
-  ion-toolbar {
-    --min-height: 64px;
-    padding: 0 16px;
-
-    /* Estilos para el logo */
-    .logo-container {
-      display: flex;
-      align-items: center;
-      margin-left: 12px;
-
-      .logo {
-        height: 32px;
-        margin-right: 8px;
-      }
-
-      .app-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-      }
-    }
-  }
-
-  /* Barra de progreso */
-  ion-progress-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  &.profile-menu-open {
+    z-index: 1002;
+    contain: none;
   }
 }
 
-/* Menú de perfil mejorado */
-.profile-container {
-  position: relative;
-  height: 100%;
+.header-toolbar {
+  --background: var(--ion-color-primary);
+  --color: white;
+  --min-height: var(--header-height);
+  padding: 0 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 
-  .profile-menu {
-    position: fixed; /* Cambiado de absolute a fixed */
-    top: 64px; /* Ajustar según altura del header */
-    right: 16px;
-    z-index: 1100;
-    width: 220px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    animation: slideDown 0.2s ease-out forwards;
-    overflow: hidden;
+  ion-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
 
-    .menu-item {
-      --padding-start: 16px;
-      --padding-end: 16px;
-      --min-height: 48px;
-    }
+.menu-button {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --color: white;
+
+  ion-icon {
+    font-size: 1.8rem;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
   }
 
-  /* En tu archivo header.component.scss */
+  .logo {
+    height: 32px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
 
-ion-avatar.avatar-icon-container {
-  width: 36px;
-  height: 36px;
+  .app-name {
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.action-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --color: white;
+  position: relative;
+
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.6rem;
+  min-width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-light);
   border-radius: 50%;
-
-  .avatar-icon {
-    font-size: 24px; /* Tamaño consistente con otros íconos */
-    color: var(--ion-color-medium);
-    margin: 0; /* Elimina márgenes por defecto */
-  }
+  background: var(--ion-color-danger);
+  color: white;
+  font-weight: bold;
 }
 
-/* Ajuste para alinear verticalmente todo el grupo de perfil */
-.profile-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.profile-container {
+  position: relative;
+  z-index: 1001;
+  margin-left: 8px;
+}
 
-  ion-avatar {
-    margin-right: 8px; /* Espacio entre avatar y texto */
+.profile-button {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --color: white;
+  --background-hover: rgba(255, 255, 255, 0.1);
+  --background-activated: rgba(255, 255, 255, 0.2);
+  --border-radius: 20px;
+  height: 40px;
+  transition: all 0.3s ease;
+
+  .avatar-icon-container {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .avatar-icon {
+      font-size: 32px;
+      color: white;
+    }
   }
 
   .user-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin: 0 8px;
+
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      line-height: 1.2;
+      color: white;
+    }
+
+    .user-role {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
   }
 
-  ion-icon[name="chevron-down-outline"] {
-    font-size: 16px;
+  .dropdown-icon {
+    font-size: 1rem;
+    color: white;
+    transition: transform 0.2s ease;
     margin-left: 4px;
-    transition: transform 0.3s ease;
 
     &.rotated {
       transform: rotate(180deg);
     }
   }
 }
+
+.profile-menu {
+  position: fixed; /* Cambiado de absolute a fixed */
+  top: var(--header-height, 60px) !important; /* Posición debajo del header */
+  right: 16px; /* Alineado con el borde derecho */
+  width: 240px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1100; /* Valor muy alto para asegurar que esté encima */
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out forwards;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transform-origin: top right; /* Animación desde la esquina */
+
+  /* Asegura que no haya elementos padres que limiten el z-index */
+  &, * {
+    position: static;
+    z-index: inherit;
+  }
+}
+  .menu-item {
+    --min-height: 50px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --background-hover: rgba(var(--ion-color-primary-rgb), 0.05);
+    --color: var(--ion-color-dark);
+    --border-color: rgba(0, 0, 0, 0.05);
+
+    ion-icon {
+      margin-right: 12px;
+      font-size: 1.2rem;
+      color: var(--ion-color-medium);
+    }
+
+    ion-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    &:last-child {
+      --border-width: 0;
+    }
+    /* Asegúrate que ningún otro componente tenga z-index más alto */
+ion-modal, ion-popover, ion-alert {
+  --ion-z-index: 999 !important; /* Menor que el menú */
+}
+/* Corrección para Ionic */
+ion-app {
+  overflow: visible !important;
 }
 
-/* Animación para el menú desplegable */
-@keyframes slideDown {
+/* Corrección para el contenido */
+ion-content {
+  contain: none;
+  overflow: visible;
+}
+
+  }
+
+
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-/* Ajustes responsivos */
+.custom-progress-bar {
+  height: var(--progress-bar-height);
+  --progress-background: rgba(255, 255, 255, 0.3);
+  --progress-color: white;
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .header-toolbar {
+    --background: var(--ion-color-primary-shade);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-menu {
+    background: var(--ion-color-step-100);
+    border-color: var(--ion-color-step-200);
+
+    .menu-item {
+      --color: var(--ion-text-color);
+      --background-hover: rgba(var(--ion-color-primary-rgb), 0.1);
+      --border-color: var(--ion-color-step-200);
+
+      ion-icon {
+        color: var(--ion-color-step-600);
+      }
+    }
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  ion-header ion-toolbar {
-    --min-height: 56px;
+  .header-toolbar {
+    padding: 0 12px;
+  }
+
+  .user-info {
+    display: none !important;
+  }
+
+  .app-name {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-toolbar {
     padding: 0 8px;
+  }
+
+  .logo-container {
+    gap: 6px;
 
     .app-name {
-      display: none;
+      font-size: 1rem !important;
     }
   }
 
-  .profile-container .profile-menu {
-    top: 56px;
-    right: 8px;
-    width: 200px;
+  .menu-button ion-icon {
+    font-size: 1.6rem !important;
+  }
+
+  .action-button ion-icon {
+    font-size: 1.3rem !important;
   }
 }

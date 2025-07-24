@@ -1,36 +1,84 @@
 <!-- resultados.component.html -->
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/estudiante/cursos"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Mis Resultados</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let result of results" class="result-item">
-      <ion-label>
-        <h2>{{ result.course }}</h2>
-        <p>{{ result.teacher }}</p>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Cabecera -->
+    <div class="cabecera-seccion">
+      <ion-buttons>
+        <ion-back-button defaultHref="/estudiante/cursos" text="Volver"
+                         icon="arrow-back" color="primary"></ion-back-button>
+      </ion-buttons>
+      <h1 class="titulo-principal">Mis Resultados</h1>
+      <p class="subtitulo">Revisa tu desempeño académico</p>
+    </div>
 
-        <div class="overall-score">
-          <ion-badge [color]="getScoreColor(result.score)">
-            {{ result.score }}/100
-          </ion-badge>
-          <ion-note>Fecha: {{ result.date | date }}</ion-note>
+    <!-- Resumen general -->
+    <div class="tarjeta-resumen">
+      <div class="item-resumen">
+        <ion-icon name="school" class="icono-resumen"></ion-icon>
+        <div>
+          <span class="valor-resumen">{{promedioGeneral()}}%</span>
+          <span class="etiqueta-resumen">Promedio</span>
         </div>
+      </div>
+      <div class="item-resumen">
+        <ion-icon name="trophy" class="icono-resumen"></ion-icon>
+        <div>
+          <span class="valor-resumen">{{mejorCurso()?.score}}%</span>
+          <span class="etiqueta-resumen">Mejor curso</span>
+        </div>
+      </div>
+      <div class="item-resumen">
+        <ion-icon name="calendar" class="icono-resumen"></ion-icon>
+        <div>
+          <span class="valor-resumen">{{totalCursos()}}</span>
+          <span class="etiqueta-resumen">Cursos evaluados</span>
+        </div>
+      </div>
+    </div>
 
-        <div class="modules-list">
-          <ion-item *ngFor="let module of result.modules" lines="none">
-            <ion-label>{{ module.name }}</ion-label>
-            <ion-badge slot="end" [color]="getScoreColor(module.score)">
-              {{ module.score }}
+    <!-- Lista de resultados -->
+    <div *ngIf="resultados.length > 0; else sinResultados" class="lista-resultados">
+      <ion-card *ngFor="let resultado of resultados" class="tarjeta-resultado">
+        <ion-card-header>
+          <div class="cabecera-curso">
+            <h2 class="titulo-curso">{{resultado.curso}}</h2>
+            <ion-badge [color]="obtenerColorPuntuacion(resultado.puntuacion)" class="badge-puntuacion">
+              {{resultado.puntuacion}}%
             </ion-badge>
-          </ion-item>
-        </div>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+          </div>
+          <p class="profesor-curso">{{resultado.profesor}}</p>
+          <ion-note class="fecha-evaluacion">
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{formatearFecha(resultado.fecha)}}
+          </ion-note>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="barra-progreso">
+            <ion-progress-bar [value]="resultado.puntuacion/100"
+                             [color]="obtenerColorPuntuacion(resultado.puntuacion)"></ion-progress-bar>
+          </div>
+
+          <div class="modulos-lista">
+            <h3 class="titulo-modulos">Módulos evaluados:</h3>
+            <div *ngFor="let modulo of resultado.modulos" class="item-modulo">
+              <span class="nombre-modulo">{{modulo.nombre}}</span>
+              <ion-badge [color]="obtenerColorPuntuacion(modulo.puntuacion)" class="puntuacion-modulo">
+                {{modulo.puntuacion}}%
+              </ion-badge>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ng-template #sinResultados>
+      <div class="sin-resultados">
+        <ion-icon name="document-text-outline" class="icono-sin-resultados"></ion-icon>
+        <h3>Aún no tienes resultados</h3>
+        <p>Completa evaluaciones para ver tus resultados</p>
+      </div>
+    </ng-template>
+  </div>
 </ion-content>

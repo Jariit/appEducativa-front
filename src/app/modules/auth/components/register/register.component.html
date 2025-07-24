@@ -1,54 +1,106 @@
-<!-- src/app/modules/auth/components/register/register.component.html -->
+<!-- register.component.html -->
 <ion-content class="ion-padding">
   <div class="form-container">
-    <ion-img src="../../../../../assets/logo.avif" class="ion-margin-bottom" style="max-width: 150px; margin: 0 auto;"></ion-img>
-
-    <ion-segment [(ngModel)]="userType" class="ion-margin-bottom">
-      <ion-segment-button value="student">
-        <ion-label>Estudiante</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="teacher">
-        <ion-label>Profesor</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <div class="logo-container">
+      <ion-img src="../../../../../assets/icono.png" class="logo"></ion-img>
+    </div>
 
     <ion-card class="custom-card">
       <ion-card-header>
-        <ion-card-title class="ion-text-center">Crear Cuenta</ion-card-title>
+        <ion-card-title class="ion-text-center title-animation">Crear Cuenta</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        <form (ngSubmit)="register()">
-          <ion-item class="form-input">
-            <ion-label position="floating">Nombre Completo</ion-label>
-            <ion-input type="text" [(ngModel)]="userData.name" name="name" required></ion-input>
-          </ion-item>
+        <form #registerForm="ngForm" (ngSubmit)="register()">
+          <!-- Nombre Completo -->
+          <div class="input-container">
+            <ion-label class="input-label">Nombre Completo</ion-label>
+            <ion-item class="form-input" lines="none"
+              [class.input-invalid]="registerForm.submitted && registerForm.controls['name']?.invalid"
+              [class.input-valid]="registerForm.submitted && registerForm.controls['name']?.valid">
+              <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input type="text" [(ngModel)]="userData.name" name="name" required
+                placeholder="Ingresa tu nombre completo" class="custom-input"></ion-input>
+              <ion-icon slot="end" name="checkmark-circle" color="success" class="validation-icon"
+                *ngIf="registerForm.submitted && registerForm.controls['name']?.valid"></ion-icon>
+              <ion-icon slot="end" name="close-circle" color="danger" class="validation-icon"
+                *ngIf="registerForm.submitted && registerForm.controls['name']?.invalid"></ion-icon>
+            </ion-item>
+            <ion-note color="danger" *ngIf="registerForm.submitted && registerForm.controls['name']?.invalid" class="error-message">
+              El nombre es requerido
+            </ion-note>
+          </div>
 
-          <ion-item class="form-input">
-            <ion-label position="floating">Correo Electrónico</ion-label>
-            <ion-input type="email" [(ngModel)]="userData.email" name="email" required></ion-input>
-          </ion-item>
+          <!-- Email -->
+          <div class="input-container">
+            <ion-label class="input-label">Correo Electrónico</ion-label>
+            <ion-item class="form-input" lines="none"
+              [class.input-invalid]="registerForm.submitted && registerForm.controls['email']?.invalid"
+              [class.input-valid]="registerForm.submitted && registerForm.controls['email']?.valid">
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input type="email" [(ngModel)]="userData.email" name="email" required email
+                placeholder="usuario@ejemplo.com" class="custom-input"></ion-input>
+              <ion-icon slot="end" name="checkmark-circle" color="success" class="validation-icon"
+                *ngIf="registerForm.submitted && registerForm.controls['email']?.valid"></ion-icon>
+              <ion-icon slot="end" name="close-circle" color="danger" class="validation-icon"
+                *ngIf="registerForm.submitted && registerForm.controls['email']?.invalid"></ion-icon>
+            </ion-item>
+            <ion-note color="danger" *ngIf="registerForm.submitted && registerForm.controls['email']?.invalid" class="error-message">
+              Por favor, introduce un correo válido
+            </ion-note>
+          </div>
 
-          <ion-item class="form-input">
-            <ion-label position="floating">Contraseña</ion-label>
-            <ion-input type="password" [(ngModel)]="userData.password" name="password" required></ion-input>
-          </ion-item>
+          <!-- Password -->
+          <div class="input-container">
+            <ion-label class="input-label">Contraseña</ion-label>
+            <ion-item class="form-input" lines="none"
+              [class.input-invalid]="registerForm.submitted && (registerForm.controls['password']?.invalid || userData.password !== userData.confirmPassword)"
+              [class.input-valid]="registerForm.submitted && registerForm.controls['password']?.valid && userData.password === userData.confirmPassword">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="userData.password" name="password"
+                required minlength="8" placeholder="Mínimo 8 caracteres" class="custom-input"></ion-input>
+              <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()" class="password-toggle">
+                <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-icon"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-note color="danger" *ngIf="registerForm.submitted && registerForm.controls['password']?.invalid" class="error-message">
+              La contraseña debe tener al menos 8 caracteres
+            </ion-note>
+          </div>
 
-          <ion-item class="form-input">
-            <ion-label position="floating">Confirmar Contraseña</ion-label>
-            <ion-input type="password" [(ngModel)]="userData.confirmPassword" name="confirmPassword" required></ion-input>
-          </ion-item>
+          <!-- Confirm Password -->
+          <div class="input-container">
+            <ion-label class="input-label">Confirmar Contraseña</ion-label>
+            <ion-item class="form-input" lines="none"
+              [class.input-invalid]="registerForm.submitted && (registerForm.controls['confirmPassword']?.invalid || userData.password !== userData.confirmPassword)"
+              [class.input-valid]="registerForm.submitted && registerForm.controls['confirmPassword']?.valid && userData.password === userData.confirmPassword">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="userData.confirmPassword" name="confirmPassword"
+                required placeholder="Confirma tu contraseña" class="custom-input"></ion-input>
+              <ion-button fill="clear" slot="end" (click)="toggleConfirmPasswordVisibility()" class="password-toggle">
+                <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="password-icon"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-note color="danger" *ngIf="registerForm.submitted && userData.password !== userData.confirmPassword" class="error-message">
+              Las contraseñas no coinciden
+            </ion-note>
+          </div>
 
-          <ion-button expand="block" type="submit" class="action-button ion-margin-top">
-            Registrarse
+          <!-- Botón de registro -->
+          <ion-button expand="block" type="submit" class="login-button"
+            [disabled]="isLoading || registerForm.invalid || userData.password !== userData.confirmPassword">
+            <div class="button-content">
+              <ion-spinner *ngIf="isLoading" name="lines" class="spinner"></ion-spinner>
+              <span *ngIf="!isLoading">Registrarse</span>
+            </div>
           </ion-button>
         </form>
 
-        <div class="ion-text-center ion-margin-top">
-          <p>
-            ¿Ya tienes una cuenta?
-            <a routerLink="/login">Inicia Sesión</a>
-          </p>
+        <div class="register-container">
+          <p>¿Ya tienes una cuenta?</p>
+          <ion-button expand="block" fill="clear" routerLink="/auth/login" class="register-button">
+            Iniciar Sesión
+          </ion-button>
         </div>
       </ion-card-content>
     </ion-card>

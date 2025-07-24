@@ -1,91 +1,263 @@
 /* actividad-detalle.component.scss */
-ion-card {
-  ion-card-header {
-    ion-card-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
+/* Estilos para la barra superior (coherente con módulo-detalle) */
+.barra-superior {
+  --background: var(--color-primario);
+  --color: white;
 
-    ion-card-subtitle {
+  .boton-retroceder {
+    --color: white;
+    --icon-font-size: 1.4rem;
+  }
+
+  .titulo-toolbar {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-inline: 0;
+  }
+
+  .icono-estado {
+    font-size: 1.6rem;
+    margin-right: 8px;
+  }
+}
+
+.fondo-contenido {
+  --background: #f9f9f9;
+}
+
+.contenedor-principal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
+
+/* Tarjeta principal de actividad */
+.tarjeta-actividad-detalle {
+  --background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 16px;
+
+  .titulo-actividad {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-texto);
+    margin-bottom: 4px;
+  }
+
+  .subtitulo-actividad {
+    .detalles-superiores {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      font-size: 1rem;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--color-texto-secundario);
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
 
       ion-icon {
-        margin-right: 6px;
+        font-size: 1rem;
+      }
+
+      .calificacion {
+        color: var(--ion-color-success);
+        font-weight: 500;
       }
     }
   }
+}
 
-  h3 {
-    font-size: 1.1rem;
+/* Estilos para secciones */
+.seccion {
+  margin-top: 24px;
+
+  .titulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin: 16px 0 8px;
-    color: var(--ion-color-primary);
+    color: var(--color-texto);
+    margin-bottom: 12px;
+
+    .icono-seccion {
+      color: var(--color-primario);
+      font-size: 1.1rem;
+    }
   }
 
-  .instructions {
-    background: rgba(var(--ion-color-light-rgb), 0.5);
-    border-radius: 8px;
-    padding: 12px;
-    margin: 12px 0;
+  .contenido-seccion {
+    background: var(--ion-color-light);
+    border-radius: 12px;
+    padding: 16px;
 
-    pre {
-      white-space: pre-wrap;
-      font-family: inherit;
+    p {
+      color: var(--color-texto);
+      line-height: 1.6;
       margin: 0;
     }
-  }
 
-  .attachments {
-    ion-list {
-      background: transparent;
-
-      ion-item {
-        --padding-start: 0;
-        --inner-padding-end: 0;
-        --border-radius: 8px;
-        margin-bottom: 8px;
-
-        h4 {
-          font-size: 0.9rem;
-          font-weight: 500;
-          margin-bottom: 2px;
-        }
-
-        p {
-          font-size: 0.8rem;
-          color: var(--ion-color-medium);
-          margin: 0;
-        }
+    &.contenido-textual {
+      pre {
+        white-space: pre-wrap;
+        font-family: inherit;
+        margin: 0;
+        color: var(--color-texto);
+        line-height: 1.6;
       }
     }
   }
+}
 
-  .submission {
-    margin-top: 24px;
+/* Estilos específicos para secciones */
+.ejemplo-codigo {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  position: relative;
 
-    ion-textarea {
+  pre {
+    margin: 0;
+    overflow-x: auto;
+
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      color: #333;
+    }
+  }
+
+  ion-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 0.8rem;
+  }
+}
+
+.lista-recursos {
+  background: transparent;
+
+  .recurso-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --border-radius: 8px;
+    margin-bottom: 8px;
+
+    .info-recurso {
+      h4 {
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: var(--color-texto);
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+        margin: 0;
+      }
+    }
+
+    .icono-recurso {
+      font-size: 1.4rem;
+    }
+
+    .boton-descarga {
+      --padding-start: 0;
+      --padding-end: 0;
+    }
+  }
+}
+
+.contenedor-video {
+  text-align: center;
+
+  .boton-video {
+    margin-bottom: 8px;
+  }
+
+  ion-note {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.contenedor-interactivo {
+  text-align: center;
+}
+
+/* Estilos para la sección de entrega */
+.contenedor-entrega {
+  .formulario-entrega {
+    .campo-texto {
       background: var(--ion-color-light);
-      border-radius: 8px;
+      border-radius: 12px;
       --padding-start: 12px;
       --padding-end: 12px;
       margin-bottom: 16px;
+      font-size: 0.95rem;
     }
 
-    .submitted {
-      display: flex;
-      align-items: center;
-      color: var(--ion-color-success);
-      font-weight: 500;
+    .boton-enviar {
+      margin-top: 8px;
+    }
+  }
 
-      ion-icon {
-        margin-right: 8px;
+  .entrega-completada {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(var(--ion-color-success-rgb), 0.1);
+    border-radius: 12px;
+
+    .icono-completado {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .detalles-entrega {
+      .fecha-entrega {
+        margin: 0 0 4px;
+        font-size: 0.9rem;
+        color: var(--color-texto);
+      }
+
+      .puntuacion {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--ion-color-success);
       }
     }
+  }
+}
 
-    .submit-button {
-      margin-top: 16px;
+/* Responsive */
+@media (max-width: 600px) {
+  .tarjeta-actividad-detalle {
+    margin: 16px 0;
+
+    .titulo-actividad {
+      font-size: 1.2rem;
+    }
+  }
+
+  .seccion {
+    .titulo-seccion {
+      font-size: 1.1rem;
     }
   }
 }

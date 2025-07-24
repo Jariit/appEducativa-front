@@ -1,59 +1,112 @@
 <!-- curso-detalle.component.html -->
-
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="barra-superior">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/estudiante/cursos"></ion-back-button>
+      <ion-back-button defaultHref="/estudiante/cursos"
+                      text="Volver"
+                      icon="arrow-back-outline"
+                      class="boton-retroceder"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ course.title }}</ion-title>
+    <ion-title class="titulo-toolbar">{{curso?.titulo}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="compartirCurso()" class="boton-accion">
+        <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card class="course-header">
-    <img src="../../../../../assets/advanced-math-formulas-on-seamless-260nw-2500229937.webp" alt="Course header">
-    <ion-card-header>
-      <ion-card-title>{{ course.title }}</ion-card-title>
-      <ion-card-subtitle>{{ course.teacher }}</ion-card-subtitle>
-    </ion-card-header>
-
-    <ion-card-content>
-      <p>{{ course.description }}</p>
-
-      <ion-item lines="none">
-        <ion-icon slot="start" name="time-outline"></ion-icon>
-        <ion-label>{{ course.schedule }}</ion-label>
-      </ion-item>
-
-      <div class="progress-summary">
-        <h3>Progreso del curso</h3>
-        <ion-progress-bar [value]="course.progress / 100"></ion-progress-bar>
-        <span>{{ course.progress }}% completado</span>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Módulos del curso</ion-label>
-    </ion-list-header>
-
-    <ion-item *ngFor="let module of course.modules"
-              detail="true"
-              [routerLink]="['/estudiante/modulo', module.id]"
-              [class.completed]="module.completed">
-      <ion-icon slot="start"
-                [name]="module.completed ? 'checkmark-circle' : 'ellipse-outline'"
-                [color]="module.completed ? 'success' : 'medium'"></ion-icon>
-
-      <ion-label>
-        <h2>{{ module.title }}</h2>
-        <p>{{ module.description }}</p>
-        <div class="module-progress">
-          <ion-progress-bar [value]="calculateModuleProgress(module) / 100"></ion-progress-bar>
-          <span>{{ module.completedActivities }} de {{ module.activities }} actividades</span>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Portada del curso -->
+    <div class="portada-curso">
+      <div class="contenedor-imagen">
+        <img [src]="curso?.imagen" [alt]="curso?.titulo" class="imagen-curso">
+        <div class="overlay-imagen"></div>
+        <div class="badge-progreso">
+          <ion-badge color="light">{{curso?.progreso}}% completado</ion-badge>
         </div>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+      </div>
+
+      <div class="informacion-profesor">
+        <ion-avatar class="avatar-profesor">
+          <img src="assets/avatars/profesor-default.png">
+        </ion-avatar>
+        <div>
+          <p class="texto-profesor">Impartido por</p>
+          <h3 class="nombre-profesor">{{curso?.profesor}}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles del curso -->
+    <ion-card class="tarjeta-detalles">
+      <ion-card-content>
+        <p class="descripcion-curso">{{curso?.descripcion}}</p>
+
+        <div class="detalles-adicionales">
+          <div class="detalle-item">
+            <ion-icon name="calendar-outline" class="icono-detalle"></ion-icon>
+            <span>{{curso?.duracion}} semanas</span>
+          </div>
+
+          <div class="detalle-item">
+            <ion-icon name="time-outline" class="icono-detalle"></ion-icon>
+            <span>{{curso?.horario}}</span>
+          </div>
+
+          <div class="detalle-item">
+            <ion-icon name="ribbon-outline" class="icono-detalle"></ion-icon>
+            <span>{{curso?.nivel}}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Barra de progreso -->
+    <div class="barra-progreso-global">
+      <div class="texto-progreso">
+        <span>Tu progreso</span>
+        <span>{{curso?.progreso}}%</span>
+      </div>
+      <ion-progress-bar [value]="curso?.progreso / 100" color="tertiary"></ion-progress-bar>
+      <ion-note>Tiempo estimado restante: {{calcularTiempoRestante()}}</ion-note>
+    </div>
+
+    <!-- Módulos del curso -->
+    <div class="seccion-modulos">
+      <h2 class="titulo-seccion">
+        <ion-icon name="layers-outline" class="icono-seccion"></ion-icon>
+        Módulos del curso
+      </h2>
+
+      <div *ngIf="curso?.modulos?.length === 0" class="sin-modulos">
+        <ion-icon name="book-outline" class="icono-sin-modulos"></ion-icon>
+        <p>Este curso no tiene módulos disponibles aún</p>
+      </div>
+
+      <div class="lista-modulos">
+        <div *ngFor="let modulo of curso?.modulos"
+             class="tarjeta-modulo"
+             [routerLink]="['/estudiante/modulo', modulo.id]"
+             [class.completado]="modulo.completado">
+
+          <div class="estado-modulo">
+            <ion-icon [name]="modulo.completado ? 'checkmark-circle' : 'ellipse-outline'"
+                     [color]="modulo.completado ? 'success' : 'medium'"></ion-icon>
+            <span class="texto-estado">{{modulo.completado ? 'Completado' : 'En progreso'}}</span>
+          </div>
+
+          <h3 class="titulo-modulo">{{modulo.titulo}}</h3>
+          <p class="descripcion-modulo">{{modulo.descripcion}}</p>
+
+          <div class="progreso-modulo">
+            <span class="texto-progreso">{{modulo.actividadesCompletadas}}/{{modulo.actividades}} actividades</span>
+            <ion-progress-bar [value]="calcularProgresoModulo(modulo) / 100"
+                             [color]="modulo.completado ? 'success' : 'primary'"></ion-progress-bar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

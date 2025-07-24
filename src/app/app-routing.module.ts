@@ -18,10 +18,6 @@ const routes: Routes = [
   {
     path: 'profesor',
     loadChildren: () => import('./modules/profesor/profesor.module').then(m => m.ProfesorModule)
-  },
-  {
-    path: '**',
-    redirectTo: 'auth'
   }
 ];
 

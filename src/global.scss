@@ -1,53 +1,55 @@
 /* src/assets/styles/global.scss */
 :root {
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
+  /* Colores primarios */
+  --ion-color-primary: #4361ee; /* Azul vibrante */
+  --ion-color-primary-rgb: 67, 97, 238;
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary-shade: #3c55d6;
+  --ion-color-primary-tint: #5671f0;
 
-  --ion-color-secondary: #3dc2ff;
-  --ion-color-secondary-rgb: 61, 194, 255;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary: #7209b7; /* Morado moderno */
+  --ion-color-secondary-rgb: 114, 9, 183;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-shade: #6408a1;
+  --ion-color-secondary-tint: #8022be;
 
-  --ion-color-tertiary: #5260ff;
-  --ion-color-tertiary-rgb: 82, 96, 255;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #4854e0;
-  --ion-color-tertiary-tint: #6370ff;
+  --ion-color-tertiary: #4cc9f0; /* Turquesa brillante */
+  --ion-color-tertiary-rgb: 76, 201, 240;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-shade: #43b1d3;
+  --ion-color-tertiary-tint: #5ecef2;
 
-  --ion-color-success: #2dd36f;
-  --ion-color-success-rgb: 45, 211, 111;
+  --ion-color-success: #4ade80; /* Verde positivo */
+  --ion-color-success-rgb: 74, 222, 128;
   --ion-color-success-contrast: #000000;
-  --ion-color-success-contrast-rgb: 0, 0, 0;
-  --ion-color-success-shade: #28ba62;
-  --ion-color-success-tint: #42d77d;
+  --ion-color-success-shade: #41c371;
+  --ion-color-success-tint: #5ce18d;
 
-  --ion-color-warning: #ffc409;
-  --ion-color-warning-rgb: 255, 196, 9;
+  --ion-color-warning: #fbbf24; /* Amarillo cálido */
+  --ion-color-warning-rgb: 251, 191, 36;
   --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #e0ac08;
-  --ion-color-warning-tint: #ffca22;
+  --ion-color-warning-shade: #dda820;
+  --ion-color-warning-tint: #fbc53a;
 
-  --ion-color-danger: #eb445a;
-  --ion-color-danger-rgb: 235, 68, 90;
-  --ion-color-danger-contrast: #ffffff;
-  --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #cf3c4f;
-  --ion-color-danger-tint: #ed576b;
+  --ion-color-danger: #f87171; /* Rojo suave */
+  --ion-color-danger-rgb: 248, 113, 113;
+  --ion-color-danger-contrast: #000000;
+  --ion-color-danger-shade: #da6464;
+  --ion-color-danger-tint: #f97f7f;
 
-  --ion-font-family: 'Roboto', sans-serif;
-  --ion-font-family: 'Roboto', sans-serif;
-  --ion-padding: 16px;
-  --ion-margin: 16px;
-  --ion-border-radius: 8px;
-  --ion-border-color: #e0e0e0;
+  /* Variables globales */
+  --fondo-pagina: linear-gradient(135deg, #f0f4ff, #e6f0ff);
+  --fondo-tarjeta: #ffffff;
+  --color-texto: #333333;
+  --color-texto-secundario: #666666;
+  --fondo-input: #f8f9fa;
+  --borde-input: #e2e8f0;
+  --color-primario: #4361ee;
+  --color-peligro: #f87171;
+  --color-exito: #4ade80;
+  --color-primario-sombra: #3c55d6;
+  --color-primario-tono: #5671f0;
+  --color-primario-rgb: 67, 97, 238;
 }
 
 /* Estilos generales */
@@ -196,6 +198,15 @@ ion-card {
     font-size: 0.8rem;
     text-align: right;
     margin-top: 4px;
+  }
+}
+/* Agrega esto a tus estilos globales o al componente */
+ion-modal {
+  --ion-backdrop-opacity: 0.7;
+  z-index: 10000 !important; /* Valor muy alto para asegurar que esté encima */
+
+  .modal-wrapper {
+    z-index: 10001 !important;
   }
 }
 }

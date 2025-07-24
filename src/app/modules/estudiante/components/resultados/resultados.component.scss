@@ -1,48 +1,219 @@
 /* resultados.component.scss */
-.result-item {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  margin-bottom: 16px;
+.fondo-contenido {
+  --background: var(--fondo-pagina);
+}
 
-  h2 {
-    font-weight: 600;
-    margin-bottom: 4px;
+.contenedor-principal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Cabecera */
+.cabecera-seccion {
+  margin-bottom: 24px;
+  animation: aparecer 0.5s ease-out;
+
+  .titulo-principal {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin-bottom: 8px;
+  }
+
+  .subtitulo {
+    color: var(--color-texto-secundario);
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
+}
+
+/* Tarjeta de resumen */
+.tarjeta-resumen {
+  display: flex;
+  justify-content: space-between;
+  background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  .item-resumen {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .icono-resumen {
+      font-size: 1.8rem;
+      color: var(--color-primario);
+      background: rgba(var(--color-primario-rgb), 0.1);
+      padding: 12px;
+      border-radius: 50%;
+    }
+
+    .valor-resumen {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-texto);
+      display: block;
+      line-height: 1;
+    }
+
+    .etiqueta-resumen {
+      font-size: 0.9rem;
+      color: var(--color-texto-secundario);
+    }
+  }
+}
+
+/* Lista de resultados */
+.lista-resultados {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.tarjeta-resultado {
+  --background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  margin: 0;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  .cabecera-curso {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+
+    .titulo-curso {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-texto);
+      margin: 0;
+      flex: 1;
+    }
+
+    .badge-puntuacion {
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 12px;
+    }
+  }
+
+  .profesor-curso {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+    margin: 4px 0;
+  }
+
+  .fecha-evaluacion {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+
+    ion-icon {
+      font-size: 0.9rem;
+    }
+  }
+
+  .barra-progreso {
+    margin: 12px 0;
+
+    ion-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+    }
+  }
+
+  .modulos-lista {
+    margin-top: 16px;
+
+    .titulo-modulos {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-texto);
+      margin-bottom: 8px;
+    }
+
+    .item-modulo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--borde-input);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .nombre-modulo {
+        font-size: 0.9rem;
+        color: var(--color-texto);
+      }
+
+      .puntuacion-modulo {
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+/* Estado sin resultados */
+.sin-resultados {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  margin-top: 20px;
+
+  .icono-sin-resultados {
+    font-size: 3rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    color: var(--color-texto);
+    margin-bottom: 8px;
   }
 
   p {
-    color: var(--ion-color-medium);
-    margin: 0 0 8px;
+    color: var(--color-texto-secundario);
+    margin: 0;
   }
+}
 
-  .overall-score {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 8px 0;
-
-    ion-badge {
-      font-size: 1rem;
-      padding: 8px 12px;
-    }
-
-    ion-note {
-      font-size: 0.8rem;
-    }
+/* Animaciones */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .modules-list {
-    background: var(--ion-color-light);
-    border-radius: 8px;
-    margin-top: 8px;
+/* Responsive */
+@media (max-width: 768px) {
+  .tarjeta-resumen {
+    flex-direction: column;
+    gap: 20px;
 
-    ion-item {
-      --padding-start: 12px;
-      --padding-end: 12px;
-      --min-height: 40px;
-
-      ion-badge {
-        font-size: 0.8rem;
-      }
+    .item-resumen {
+      justify-content: flex-start;
     }
   }
 }
