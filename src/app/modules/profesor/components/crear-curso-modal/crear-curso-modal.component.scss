@@ -1,0 +1,82 @@
+ion-content {
+  --background: var(--fondo-pagina);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+.campo-formulario {
+  margin-bottom: 20px;
+
+  .etiqueta {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--color-texto);
+  }
+
+  .contenedor-imagen {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 8px;
+    border: 2px dashed var(--color-borde);
+
+    .imagen-curso {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay-imagen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+
+      ion-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .mensaje-error {
+    color: var(--ion-color-danger);
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
+}
+
+.botones-accion {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+
+  ion-button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 400px) {
+  .botones-accion {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contenedor-imagen {
+    height: 140px;
+  }
+}

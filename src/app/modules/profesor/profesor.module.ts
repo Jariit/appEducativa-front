@@ -30,6 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
           { path: 'cursos', component: GestionCursosComponent },
           { path: 'cursos/:id/modulos', component: GestionModulosComponent },
           { path: 'modulos/:id/actividades', component: GestionActividadesComponent },
+
+
           { path: 'tareas', component: RevisionTareasComponent },
           { path: 'resultados', component: ResultadosTestsComponent },
           { path: '', redirectTo: 'cursos', pathMatch: 'full' }

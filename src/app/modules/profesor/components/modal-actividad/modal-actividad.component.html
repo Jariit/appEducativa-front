@@ -1,0 +1,192 @@
+<ion-header>
+  <ion-toolbar color="primary" class="barra-superior">
+    <ion-title>{{actividadEditando ? 'Editar Actividad' : 'Nueva Actividad'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarModal()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding fondo-modal">
+  <form (ngSubmit)="guardarActividad()">
+    <!-- Sección básica -->
+    <ion-card class="tarjeta-formulario">
+      <ion-card-header>
+        <ion-card-title>Información básica</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="item-formulario">
+          <ion-label position="floating">Título de la actividad</ion-label>
+          <ion-input [(ngModel)]="actividad.titulo" name="titulo" required></ion-input>
+        </ion-item>
+
+        <ion-item class="item-formulario">
+          <ion-label>Tipo de actividad</ion-label>
+          <ion-select [(ngModel)]="actividad.tipo" name="tipo" interface="popover" (ionChange)="actualizarCampos()">
+            <ion-select-option value="lectura">Lectura</ion-select-option>
+            <ion-select-option value="tarea">Tarea</ion-select-option>
+            <ion-select-option value="proyecto">Proyecto</ion-select-option>
+            <ion-select-option value="examen">Examen/Test</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="item-formulario">
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea [(ngModel)]="actividad.descripcion" name="descripcion" rows="3"></ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Sección específica por tipo -->
+    <ion-card class="tarjeta-formulario" *ngIf="actividad.tipo !== 'examen'">
+      <ion-card-header>
+        <ion-card-title>Configuración específica</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="actividad.tipo === 'lectura'">
+          <ion-item class="item-formulario">
+            <ion-label position="floating">Duración estimada (minutos)</ion-label>
+            <ion-input type="number" [(ngModel)]="actividad.duracion" name="duracion"></ion-input>
+          </ion-item>
+        </div>
+
+        <div *ngIf="actividad.tipo === 'tarea' || actividad.tipo === 'proyecto'">
+          <ion-item class="item-formulario">
+            <ion-label position="stacked">Fecha límite</ion-label>
+            <ion-input type="date" [(ngModel)]="actividad.fechaLimite" name="fechaLimite"></ion-input>
+          </ion-item>
+
+          <ion-item class="item-formulario" *ngIf="actividad.tipo === 'proyecto'">
+            <ion-label position="floating">Puntuación máxima</ion-label>
+            <ion-input type="number" [(ngModel)]="actividad.puntuacionMaxima" name="puntuacionMaxima" min="0" max="100"></ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Sección para exámenes/tests -->
+    <ion-card class="tarjeta-formulario" *ngIf="actividad.tipo === 'examen'">
+      <ion-card-header>
+        <ion-card-title>Configuración del examen</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="item-formulario">
+          <ion-label position="stacked">Fecha límite</ion-label>
+          <ion-input type="date" [(ngModel)]="actividad.fechaLimite" name="fechaLimite"></ion-input>
+        </ion-item>
+
+        <ion-item class="item-formulario">
+          <ion-label position="floating">Duración (minutos)</ion-label>
+          <ion-input type="number" [(ngModel)]="actividad.duracionExamen" name="duracionExamen" min="1"></ion-input>
+        </ion-item>
+
+        <ion-item class="item-formulario">
+          <ion-label position="floating">Número de intentos permitidos</ion-label>
+          <ion-input type="number" [(ngModel)]="actividad.intentosPermitidos" name="intentosPermitidos" min="1" value="1"></ion-input>
+        </ion-item>
+
+        <div class="preguntas-container">
+          <h3>Preguntas del examen</h3>
+
+          <div class="pregunta-card" *ngFor="let pregunta of actividad.preguntas; let i = index">
+            <div class="encabezado-pregunta">
+              <h4>Pregunta {{i + 1}}</h4>
+              <ion-button fill="clear" color="danger" size="small" (click)="eliminarPregunta(i)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+
+            <ion-item class="item-formulario">
+              <ion-label position="floating">Texto de la pregunta</ion-label>
+              <ion-textarea [(ngModel)]="pregunta.texto" [name]="'pregunta'+i" rows="2"></ion-textarea>
+            </ion-item>
+
+            <ion-item class="item-formulario">
+              <ion-label position="floating">Puntos</ion-label>
+              <ion-input type="number" [(ngModel)]="pregunta.puntos" [name]="'puntos'+i" min="1"></ion-input>
+            </ion-item>
+
+            <div class="opciones-container">
+              <h5>Opciones de respuesta</h5>
+
+              <div class="opcion-item" *ngFor="let opcion of pregunta.opciones; let j = index">
+                <ion-item class="item-formulario">
+                  <ion-label position="floating">Opción {{j + 1}}</ion-label>
+                  <ion-input [(ngModel)]="opcion.texto" [name]="'opcion'+i+'-'+j"></ion-input>
+                </ion-item>
+
+                <ion-item class="item-formulario">
+                  <ion-label>Es correcta</ion-label>
+                  <ion-checkbox slot="start" [(ngModel)]="opcion.correcta" [name]="'correcta'+i+'-'+j"></ion-checkbox>
+                </ion-item>
+
+                <ion-button fill="clear" color="danger" size="small" (click)="eliminarOpcion(i, j)">
+                  <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                </ion-button>
+              </div>
+
+              <ion-button expand="block" fill="outline" size="small" (click)="agregarOpcion(i)">
+                <ion-icon slot="start" name="add-outline"></ion-icon>
+                Agregar opción
+              </ion-button>
+            </div>
+          </div>
+
+          <ion-button expand="block" fill="outline" (click)="agregarPregunta()">
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+            Agregar pregunta
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Sección de archivos adjuntos -->
+    <ion-card class="tarjeta-formulario">
+      <ion-card-header>
+        <ion-card-title>Material de apoyo</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="archivos-container">
+          <div class="archivo-item" *ngFor="let archivo of actividad.archivos; let i = index">
+            <ion-icon name="document-outline"></ion-icon>
+            <span>{{archivo.nombre}}</span>
+            <div class="acciones-archivo">
+              <a *ngIf="archivo.url" href="{{archivo.url}}" target="_blank" download>
+                <ion-button fill="clear" size="small">
+                  <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+                </ion-button>
+              </a>
+              <ion-button fill="clear" color="danger" size="small" (click)="eliminarArchivo(i)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ion-button expand="block" fill="outline" (click)="seleccionarArchivo()">
+          <ion-icon slot="start" name="attach-outline"></ion-icon>
+          Adjuntar archivo
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de acción -->
+    <div class="botones-accion">
+      <ion-button expand="block" color="primary" type="submit" [disabled]="!actividad.titulo || (actividad.tipo === 'examen' && actividad.preguntas.length === 0)">
+        <ion-icon slot="start" [name]="actividadEditando ? 'save-outline' : 'add-outline'"></ion-icon>
+        {{actividadEditando ? 'Guardar cambios' : 'Crear actividad'}}
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" color="medium" (click)="cerrarModal()">
+        Cancelar
+      </ion-button>
+
+      <ion-button *ngIf="actividadEditando" expand="block" fill="outline" color="danger" (click)="confirmarEliminacion()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar actividad
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

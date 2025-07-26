@@ -1,28 +1,95 @@
 <!-- gestion-cursos.component.html -->
-<app-header></app-header>
+<app-header titulo="Mis Cursos"></app-header>
 
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Gestión de Cursos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="abrirModalCrearCurso()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Sección de resumen -->
+    <div class="seccion-bienvenida">
+      <h1 class="titulo-bienvenida">Gestión de Cursos</h1>
+      <p class="subtitulo-bienvenida">Administra tus cursos y contenido</p>
 
-<ion-content class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let curso of cursos" [routerLink]="['/profesor/cursos', curso.id, 'modulos']">
-      <ion-label>
-        <h2>{{ curso.titulo }}</h2>
-        <p>{{ curso.estudiantes }} estudiantes</p>
-        <p>Del {{ curso.fechaInicio | date }} al {{ curso.fechaFin | date }}</p>
-      </ion-label>
-      <ion-badge slot="end" [color]="curso.estado === 'activo' ? 'success' : 'warning'">
-        {{ curso.estado }}
-      </ion-badge>
-    </ion-item>
-  </ion-list>
+      <div class="tarjeta-resumen">
+        <div class="item-resumen">
+          <ion-icon name="book" class="icono-resumen"></ion-icon>
+          <div>
+            <span class="valor-resumen">{{cursos.length}}</span>
+            <span class="etiqueta-resumen">Cursos</span>
+          </div>
+        </div>
+        <div class="item-resumen">
+          <ion-icon name="people" class="icono-resumen"></ion-icon>
+          <div>
+            <span class="valor-resumen">{{totalEstudiantes()}}</span>
+            <span class="etiqueta-resumen">Estudiantes</span>
+          </div>
+        </div>
+        <div class="item-resumen">
+          <ion-icon name="stats-chart" class="icono-resumen"></ion-icon>
+          <div>
+            <span class="valor-resumen">{{cursosActivos()}}</span>
+            <span class="etiqueta-resumen">Activos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de cursos -->
+    <div class="seccion-cursos">
+      <div class="cabecera-seccion">
+        <h2 class="titulo-seccion">Todos mis cursos</h2>
+        <ion-button fill="clear" size="small" (click)="abrirModalCrearCurso()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Nuevo curso
+        </ion-button>
+      </div>
+
+      <div *ngIf="cursos.length === 0" class="sin-cursos">
+        <ion-icon name="book-outline" class="icono-sin-cursos"></ion-icon>
+        <p>No has creado ningún curso aún</p>
+        <ion-button fill="outline" (click)="abrirModalCrearCurso()">
+          Crear primer curso
+        </ion-button>
+      </div>
+
+      <div class="lista-cursos">
+        <ion-card *ngFor="let curso of cursos" class="tarjeta-curso">
+          <div class="contenedor-imagen">
+            <img src="assets/default-course.png" alt="{{curso.titulo}}" class="imagen-curso">
+            <div class="badge-estado" [class.activo]="curso.estado === 'activo'">
+              {{curso.estado | uppercase}}
+            </div>
+          </div>
+
+          <ion-card-header>
+            <ion-card-title class="titulo-curso">{{curso.titulo}}</ion-card-title>
+            <ion-card-subtitle class="profesor-curso">
+              {{curso.estudiantes}} estudiantes •
+              {{formatearFecha(curso.fechaInicio)}} - {{formatearFecha(curso.fechaFin)}}
+            </ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="acciones-curso">
+              <ion-button fill="clear" [routerLink]="['/profesor/cursos', curso.id, 'modulos']" class="boton-accion">
+                <ion-icon slot="start" name="book"></ion-icon>
+                Módulos
+              </ion-button>
+
+              <ion-button fill="clear" [routerLink]="['/profesor/cursos', curso.id, 'estudiantes']" class="boton-accion">
+                <ion-icon slot="start" name="people"></ion-icon>
+                Estudiantes
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Botón flotante para crear curso -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button color="primary" (click)="abrirModalCrearCurso()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
 </ion-content>

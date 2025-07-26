@@ -1,0 +1,189 @@
+/* Variables de color */
+:root {
+  --color-primario: #3880ff;
+  --color-secundario: #3dc2ff;
+  --color-exito: #2dd36f;
+  --color-peligro: #eb445a;
+  --color-advertencia: #ffc409;
+  --color-texto: #2f2f2f;
+  --color-texto-secundario: #666;
+  --color-fondo: #f9f9f9;
+  --color-borde: #e0e0e0;
+}
+
+/* Estilos generales */
+.fondo-modal {
+  --background: var(--color-fondo);
+}
+
+.barra-superior {
+  --background: var(--color-primario);
+  --color: white;
+}
+
+.tarjeta-formulario {
+  --background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+
+  ion-card-header {
+    padding-bottom: 8px;
+
+    ion-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-primario);
+    }
+  }
+}
+
+.item-formulario {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: white;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde);
+  transition: all 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.1);
+  }
+
+  ion-label {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+  }
+}
+
+/* Sección de preguntas */
+.preguntas-container {
+  margin-top: 16px;
+
+  h3 {
+    color: var(--color-texto);
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+}
+
+.pregunta-card {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  border-left: 3px solid var(--color-primario);
+
+  .encabezado-pregunta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    h4 {
+      margin: 0;
+      color: var(--color-texto);
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.opciones-container {
+  margin-top: 12px;
+
+  h5 {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+}
+
+.opcion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  ion-item {
+    flex: 1;
+    --min-height: 48px;
+  }
+}
+
+/* Sección de archivos */
+.archivos-container {
+  margin-bottom: 16px;
+}
+
+.archivo-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--color-borde);
+
+  ion-icon {
+    color: var(--color-primario);
+    margin-right: 8px;
+    font-size: 1.2rem;
+  }
+
+  span {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--color-texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .acciones-archivo {
+    display: flex;
+    gap: 4px;
+  }
+}
+
+/* Botones de acción */
+.botones-accion {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  ion-button {
+    --border-radius: 8px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    margin: 0;
+    font-weight: 500;
+    height: 48px;
+
+    &[color="primary"] {
+      --box-shadow: 0 4px 8px rgba(56, 128, 255, 0.2);
+    }
+
+    &[color="danger"] {
+      --box-shadow: 0 4px 8px rgba(235, 68, 90, 0.1);
+    }
+  }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .tarjeta-formulario {
+    margin-bottom: 24px;
+  }
+
+  .botones-accion {
+    flex-direction: row;
+
+    ion-button {
+      flex: 1;
+    }
+  }
+}

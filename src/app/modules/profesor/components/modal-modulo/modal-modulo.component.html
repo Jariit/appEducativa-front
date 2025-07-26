@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{moduloEditando ? 'Editar Módulo' : 'Agregar Módulo'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarModal()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="guardarModulo()">
+    <ion-item class="item-formulario">
+      <ion-label position="floating">Título del módulo</ion-label>
+      <ion-input [(ngModel)]="modulo.titulo" name="titulo" required></ion-input>
+    </ion-item>
+
+    <ion-item class="item-formulario">
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea [(ngModel)]="modulo.descripcion" name="descripcion" rows="3"></ion-textarea>
+    </ion-item>
+
+    <ion-item class="item-formulario">
+      <ion-label position="floating">Orden en el curso</ion-label>
+      <ion-input type="number" [(ngModel)]="modulo.orden" name="orden" min="1"></ion-input>
+    </ion-item>
+
+    <ion-item class="item-formulario">
+      <ion-label>Tipo de módulo</ion-label>
+      <ion-select [(ngModel)]="modulo.tipo" name="tipo" interface="popover">
+        <ion-select-option value="teoria">Teoría</ion-select-option>
+        <ion-select-option value="practica">Práctica</ion-select-option>
+        <ion-select-option value="proyecto">Proyecto</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="botones-accion">
+      <ion-button expand="block" color="primary" type="submit" [disabled]="!modulo.titulo">
+        <ion-icon slot="start" [name]="moduloEditando ? 'save-outline' : 'add-outline'"></ion-icon>
+        {{moduloEditando ? 'Actualizar' : 'Agregar'}}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

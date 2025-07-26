@@ -1,35 +1,86 @@
-<!-- crear-curso-modal.component.html -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nuevo Curso</ion-title>
+    <ion-title>Crear Nuevo Curso</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancelar()">Cancelar</ion-button>
+      <ion-button (click)="cancelar()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="crearCurso()">
-    <ion-item>
-      <ion-label position="floating">Título del curso</ion-label>
-      <ion-input [(ngModel)]="nuevoCurso.titulo" name="titulo" required></ion-input>
-    </ion-item>
+  <form [formGroup]="formularioCurso" (ngSubmit)="onSubmit()">
+    <!-- Campo de imagen -->
+    <div class="campo-formulario">
+      <label class="etiqueta">Imagen del curso</label>
+      <div class="contenedor-imagen" (click)="seleccionarImagen()">
+        <img [src]="imagenPrevisualizacion || 'assets/default-course.png'"
+             alt="Previsualización" class="imagen-curso">
+        <div class="overlay-imagen">
+          <ion-icon name="camera"></ion-icon>
+          <span>Cambiar imagen</span>
+        </div>
+      </div>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea [(ngModel)]="nuevoCurso.descripcion" name="descripcion" rows="3"></ion-textarea>
-    </ion-item>
+    <!-- Campo de título -->
+    <div class="campo-formulario">
+      <ion-item>
+        <ion-label position="floating">Título del curso</ion-label>
+        <ion-input formControlName="titulo" type="text" required></ion-input>
+      </ion-item>
+      <div *ngIf="formularioCurso.get('titulo')?.invalid && formularioCurso.get('titulo')?.touched"
+           class="mensaje-error">
+        El título es requerido (mínimo 5 caracteres)
+      </div>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">Fecha de inicio</ion-label>
-      <ion-input type="date" [(ngModel)]="nuevoCurso.fechaInicio" name="fechaInicio" required></ion-input>
-    </ion-item>
+    <!-- Campo de descripción -->
+    <div class="campo-formulario">
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-textarea formControlName="descripcion" rows="4" required></ion-textarea>
+      </ion-item>
+      <div *ngIf="formularioCurso.get('descripcion')?.invalid && formularioCurso.get('descripcion')?.touched"
+           class="mensaje-error">
+        La descripción es requerida (mínimo 20 caracteres)
+      </div>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">Fecha de fin</ion-label>
-      <ion-input type="date" [(ngModel)]="nuevoCurso.fechaFin" name="fechaFin" required></ion-input>
-    </ion-item>
+    <!-- Campo de categoría -->
+    <div class="campo-formulario">
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-select formControlName="categoria" interface="popover">
+          <ion-select-option value="matematicas">Matemáticas</ion-select-option>
+          <ion-select-option value="programacion">Programación</ion-select-option>
+          <ion-select-option value="ciencias">Ciencias</ion-select-option>
+          <ion-select-option value="humanidades">Humanidades</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
 
-    <ion-button expand="block" type="submit" class="ion-margin-top">Crear Curso</ion-button>
+    <!-- Campo de nivel -->
+    <div class="campo-formulario">
+      <ion-item>
+        <ion-label>Nivel de dificultad</ion-label>
+        <ion-select formControlName="nivel" interface="popover">
+          <ion-select-option value="principiante">Principiante</ion-select-option>
+          <ion-select-option value="intermedio">Intermedio</ion-select-option>
+          <ion-select-option value="avanzado">Avanzado</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="botones-accion">
+      <ion-button type="button" fill="outline" expand="block" (click)="cancelar()">
+        Cancelar
+      </ion-button>
+      <ion-button type="submit" color="primary" expand="block" [disabled]="formularioCurso.invalid">
+        Crear Curso
+      </ion-button>
+    </div>
   </form>
 </ion-content>

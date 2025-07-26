@@ -1,42 +1,115 @@
-<!-- gestion-modulos.component.html -->
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="barra-superior">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/profesor/cursos"></ion-back-button>
+      <ion-back-button defaultHref="/profesor/cursos" text="Volver" class="boton-retroceder"></ion-back-button>
     </ion-buttons>
-    <ion-title>Módulos del Curso</ion-title>
+    <ion-title class="titulo-toolbar">{{curso?.titulo || 'Módulos'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModalModulo()" class="boton-accion">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let modulo of modulos" [routerLink]="['/profesor/modulos', modulo.id, 'actividades']">
-      <ion-label>
-        <h2>{{ modulo.titulo }}</h2>
-        <p>{{ modulo.descripcion }}</p>
-      </ion-label>
-      <ion-badge slot="end">Orden: {{ modulo.orden }}</ion-badge>
-    </ion-item>
-  </ion-list>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Tarjeta de información del curso -->
+    <ion-card class="tarjeta-curso">
+      <img [src]="curso?.imagen || 'assets/default-course.png'" alt="Imagen del curso" class="imagen-curso">
+      <ion-card-header>
+        <ion-card-title class="titulo-curso">{{curso?.titulo}}</ion-card-title>
+        <ion-card-subtitle class="subtitulo-curso">
+          <ion-icon name="person-outline"></ion-icon>
+          {{curso?.profesor}}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="descripcion-curso">{{curso?.descripcion}}</p>
 
-  <ion-card class="ion-margin-top">
-    <ion-card-header>
-      <ion-card-title>Agregar Módulo</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Título</ion-label>
-        <ion-input [(ngModel)]="nuevoModulo.titulo"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Descripción</ion-label>
-        <ion-input [(ngModel)]="nuevoModulo.descripcion"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Orden</ion-label>
-        <ion-input type="number" [(ngModel)]="nuevoModulo.orden"></ion-input>
-      </ion-item>
-      <ion-button expand="block" (click)="agregarModulo()">Agregar Módulo</ion-button>
-    </ion-card-content>
-  </ion-card>
+        <div class="detalles-curso">
+          <ion-badge color="light" class="detalle-item">
+            <ion-icon name="time-outline" color="primary"></ion-icon>
+            {{curso?.duracion}} semanas
+          </ion-badge>
+
+          <ion-badge color="light" class="detalle-item">
+            <ion-icon name="calendar-outline" color="primary"></ion-icon>
+            {{curso?.horario}}
+          </ion-badge>
+
+          <ion-badge color="light" class="detalle-item">
+            <ion-icon name="layers-outline" color="primary"></ion-icon>
+            {{modulos.length}} módulos
+          </ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de módulos -->
+    <div class="seccion-modulos">
+      <div class="cabecera-seccion">
+        <h2 class="titulo-seccion">
+          <ion-icon name="layers-outline" class="icono-seccion"></ion-icon>
+          Módulos del Curso
+        </h2>
+        <ion-button fill="clear" size="small" (click)="abrirModalModulo()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Nuevo módulo
+        </ion-button>
+      </div>
+
+      <div *ngIf="modulos.length === 0" class="sin-modulos">
+        <ion-icon name="file-tray-stacked-outline" class="icono-sin-modulos"></ion-icon>
+        <p>No hay módulos creados para este curso</p>
+        <ion-button fill="outline" (click)="abrirModalModulo()">
+          Crear primer módulo
+        </ion-button>
+      </div>
+
+      <div class="lista-modulos">
+        <ion-card *ngFor="let modulo of modulos" class="tarjeta-modulo"
+                 [class.completado]="modulo.completado">
+          <div class="encabezado-modulo">
+            <div class="estado-modulo">
+              <ion-icon [name]="modulo.completado ? 'checkmark-circle' : 'ellipse-outline'"
+                       [color]="modulo.completado ? 'success' : 'medium'"></ion-icon>
+              <span>{{modulo.completado ? 'Completado' : 'En progreso'}}</span>
+            </div>
+
+            <div class="acciones-modulo">
+              <ion-button fill="clear" size="small" (click)="abrirModalModulo(modulo)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="confirmarEliminacion(modulo.id)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <h3 class="titulo-modulo">{{modulo.titulo}}</h3>
+          <p class="descripcion-modulo">{{modulo.descripcion}}</p>
+
+          <div class="progreso-modulo">
+            <div class="texto-progreso">
+              <span>Progreso del módulo</span>
+              <span>{{calcularProgresoModulo(modulo)}}%</span>
+            </div>
+            <ion-progress-bar [value]="calcularProgresoModulo(modulo)/100"
+                             [color]="modulo.completado ? 'success' : 'primary'"></ion-progress-bar>
+            <ion-note>
+              <ion-icon name="list-outline"></ion-icon>
+              {{modulo.actividadesCompletadas || 0}}/{{modulo.actividades || 0}} actividades
+            </ion-note>
+          </div>
+
+          <ion-button expand="block" fill="outline" [routerLink]="['/profesor/modulos', modulo.id, 'actividades']"
+                     class="boton-actividades">
+            <ion-icon slot="start" name="book-outline"></ion-icon>
+            Gestionar actividades
+          </ion-button>
+        </ion-card>
+      </div>
+    </div>
+  </div>
 </ion-content>

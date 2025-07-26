@@ -1,56 +1,109 @@
-<!-- gestion-actividades.component.html -->
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="barra-superior">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/profesor/cursos"></ion-back-button>
+      <ion-back-button defaultHref="/profesor/modulos" text="Volver" class="boton-retroceder"></ion-back-button>
     </ion-buttons>
-    <ion-title>Actividades del Módulo</ion-title>
+    <ion-title class="titulo-toolbar">{{modulo?.titulo || 'Actividades'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModalActividad()" class="boton-accion">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let actividad of actividades">
-      <ion-icon slot="start"
-                [name]="getIconoActividad(actividad.tipo)"
-                [color]="actividad.completada ? 'success' : 'primary'"></ion-icon>
-      <ion-label>
-        <h2>{{ actividad.titulo }}</h2>
-        <p>{{ actividad.tipo | titlecase }}</p>
-        <p *ngIf="actividad.fechaLimite">Fecha límite: {{ actividad.fechaLimite | date }}</p>
-      </ion-label>
-      <ion-badge slot="end" [color]="actividad.completada ? 'success' : 'warning'">
-        {{ actividad.completada ? 'Completada' : 'Pendiente' }}
-      </ion-badge>
-    </ion-item>
-  </ion-list>
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Encabezado del módulo -->
+    <ion-card class="tarjeta-modulo-header">
+      <ion-card-header>
+        <ion-card-title class="titulo-modulo">{{modulo?.titulo}}</ion-card-title>
+        <ion-card-subtitle class="subtitulo-modulo">
+          <ion-icon name="book-outline"></ion-icon>
+          {{modulo?.curso}}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="descripcion-modulo">{{modulo?.descripcion}}</p>
 
-  <ion-card class="ion-margin-top">
-    <ion-card-header>
-      <ion-card-title>Agregar Actividad</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Título</ion-label>
-        <ion-input [(ngModel)]="nuevaActividad.titulo"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Tipo</ion-label>
-        <ion-select [(ngModel)]="nuevaActividad.tipo">
-          <ion-select-option *ngFor="let tipo of tiposActividad" [value]="tipo.value">
-            {{ tipo.label }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Descripción</ion-label>
-        <ion-textarea [(ngModel)]="nuevaActividad.descripcion" rows="3"></ion-textarea>
-      </ion-item>
-      <ion-item *ngIf="nuevaActividad.tipo !== 'lectura'">
-        <ion-label position="floating">Fecha límite</ion-label>
-        <ion-input type="date" [(ngModel)]="nuevaActividad.fechaLimite"></ion-input>
-      </ion-item>
-      <ion-button expand="block" (click)="agregarActividad()">Agregar Actividad</ion-button>
-    </ion-card-content>
-  </ion-card>
+        <div class="barra-progreso-modulo">
+          <div class="texto-progreso">
+            <span>Progreso del módulo</span>
+            <span>{{calcularProgresoModulo()}}%</span>
+          </div>
+          <ion-progress-bar [value]="calcularProgresoModulo()/100" color="primary"></ion-progress-bar>
+          <ion-note>
+            <ion-icon name="list-outline"></ion-icon>
+            {{actividadesCompletadas}}/{{actividades.length}} actividades
+          </ion-note>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de actividades -->
+    <div class="seccion-actividades">
+      <h2 class="titulo-seccion">
+        <ion-icon name="list-outline" class="icono-seccion"></ion-icon>
+        Actividades del Módulo
+      </h2>
+
+      <div *ngIf="actividades.length === 0" class="sin-actividades">
+        <ion-icon name="file-tray-outline" class="icono-sin-actividades"></ion-icon>
+        <p>No hay actividades creadas para este módulo</p>
+        <ion-button fill="outline" (click)="abrirModalActividad()">
+          Agregar primera actividad
+        </ion-button>
+      </div>
+
+      <div class="lista-actividades">
+        <ion-card *ngFor="let actividad of actividades" class="tarjeta-actividad"
+                 [class.completada]="actividad.completada">
+          <div class="encabezado-actividad">
+            <ion-icon [name]="getIconoActividad(actividad.tipo)"
+                     [color]="actividad.completada ? 'success' : 'primary'"
+                     class="icono-tipo"></ion-icon>
+
+            <div class="acciones-actividad">
+              <ion-button fill="clear" size="small" (click)="abrirModalActividad(actividad)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="confirmarEliminacion(actividad.id)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <h3 class="titulo-actividad">{{actividad.titulo}}</h3>
+          <p class="descripcion-actividad">{{actividad.descripcion}}</p>
+
+          <div class="detalles-actividad">
+            <div *ngIf="actividad.tipo === 'lectura'" class="detalle-item">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{actividad.duracion || 'Duración no especificada'}}</span>
+              <span *ngIf="actividad.recursos" class="recursos">
+                <ion-icon name="document-attach-outline"></ion-icon>
+                {{actividad.recursos}} recursos
+              </span>
+            </div>
+
+            <div *ngIf="actividad.tipo === 'tarea' || actividad.tipo === 'proyecto'" class="detalle-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>Entrega: {{formatearFecha(actividad.fechaLimite)}}</span>
+              <span *ngIf="actividad.completada" class="calificacion">
+                <ion-icon name="ribbon-outline"></ion-icon>
+                {{actividad.calificacion || '--'}}/100
+              </span>
+            </div>
+          </div>
+
+<ion-button expand="block" fill="outline"
+           [routerLink]="['/profesor/actividades', actividad.id]"
+           class="boton-gestionar">
+  <ion-icon slot="start" name="settings-outline"></ion-icon>
+  Gestionar actividad
+</ion-button>
+        </ion-card>
+      </div>
+    </div>
+  </div>
 </ion-content>
