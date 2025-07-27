@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar color="primary" class="barra-superior">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profesor/actividades" text="Volver" class="boton-retroceder"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="titulo-toolbar">Calificar Actividad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding fondo-contenido">
+  <div class="contenedor-principal">
+    <!-- Información de la actividad y estudiante -->
+    <ion-card class="tarjeta-informacion">
+      <ion-card-header>
+        <ion-card-title class="titulo-actividad">{{actividad?.titulo}}</ion-card-title>
+        <ion-card-subtitle class="subtitulo-actividad">
+          <ion-icon name="person-outline"></ion-icon>
+          Estudiante: {{estudiante?.nombre || 'Desconocido'}}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div *ngIf="entrega?.archivos.length > 0" class="seccion-archivos">
+          <h3 class="titulo-seccion">
+            <ion-icon name="document-attach-outline" class="icono-seccion"></ion-icon>
+            Archivos entregados
+          </h3>
+          <ion-list>
+            <ion-item *ngFor="let archivo of entrega?.archivos">
+              <ion-icon slot="start" name="document-outline"></ion-icon>
+              <ion-label>{{archivo}}</ion-label>
+              <ion-button fill="clear" slot="end" (click)="descargarArchivo(archivo)">
+                <ion-icon name="download-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Formulario de calificación -->
+    <ion-card class="tarjeta-calificacion">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="ribbon-outline" class="icono-titulo"></ion-icon>
+          Calificación
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form (ngSubmit)="guardarCalificacion()">
+          <ion-item>
+            <ion-label position="floating">Puntaje (0-{{actividad?.puntos || 100}})</ion-label>
+            <ion-input type="number" [(ngModel)]="calificacion" name="calificacion" min="0" [max]="actividad?.puntos || 100" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Retroalimentación</ion-label>
+            <ion-textarea [(ngModel)]="retroalimentacion" name="retroalimentacion" rows="4"></ion-textarea>
+          </ion-item>
+
+          <ion-button type="submit" expand="block" class="boton-guardar">
+            <ion-icon slot="start" name="save-outline"></ion-icon>
+            Guardar Calificación
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
