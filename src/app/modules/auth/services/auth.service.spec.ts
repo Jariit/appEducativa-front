@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = 'tu-api-url';
-
+  public redirectUrl?: string;
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {

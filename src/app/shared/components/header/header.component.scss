@@ -1,17 +1,14 @@
 /* header.component.scss */
 :host {
   display: block;
-   position: relative; /* Establece un contexto de apilamiento */
+  position: relative;
   z-index: 1000;
   --header-height: 60px;
   --progress-bar-height: 3px;
 }
 
 ion-header {
-  &.profile-menu-open {
-    z-index: 1002;
-    contain: none;
-  }
+  position: relative;
 }
 
 .header-toolbar {
@@ -20,7 +17,10 @@ ion-header {
   --min-height: var(--header-height);
   padding: 0 16px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
 
   ion-buttons {
     display: flex;
@@ -33,6 +33,7 @@ ion-header {
   --padding-start: 6px;
   --padding-end: 6px;
   --color: white;
+  margin-right: 8px;
 
   ion-icon {
     font-size: 1.8rem;
@@ -95,7 +96,6 @@ ion-header {
 
 .profile-container {
   position: relative;
-  z-index: 1001;
   margin-left: 8px;
 }
 
@@ -156,74 +156,74 @@ ion-header {
   }
 }
 
-.profile-menu {
-  position: fixed; /* Cambiado de absolute a fixed */
-  top: var(--header-height, 60px) !important; /* Posición debajo del header */
-  right: 16px; /* Alineado con el borde derecho */
-  width: 240px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 1100; /* Valor muy alto para asegurar que esté encima */
-  overflow: hidden;
+.profile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+  opacity: 0;
   animation: fadeIn 0.2s ease-out forwards;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transform-origin: top right; /* Animación desde la esquina */
-
-  /* Asegura que no haya elementos padres que limiten el z-index */
-  &, * {
-    position: static;
-    z-index: inherit;
-  }
 }
+
+.profile-menu-container {
+  position: fixed;
+  top: calc(var(--header-height) + 8px);
+  right: 16px;
+  z-index: 1000;
+  animation: slideDown 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.profile-menu {
+  width: 220px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform-origin: top right;
+
   .menu-item {
-    --min-height: 50px;
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --background-hover: rgba(var(--ion-color-primary-rgb), 0.05);
-    --color: var(--ion-color-dark);
-    --border-color: rgba(0, 0, 0, 0.05);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
     ion-icon {
       margin-right: 12px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--ion-color-medium);
     }
 
-    ion-label {
+    span {
       font-size: 0.95rem;
       font-weight: 500;
+      color: var(--ion-color-dark);
     }
 
     &:last-child {
-      --border-width: 0;
+      border-bottom: none;
     }
-    /* Asegúrate que ningún otro componente tenga z-index más alto */
-ion-modal, ion-popover, ion-alert {
-  --ion-z-index: 999 !important; /* Menor que el menú */
-}
-/* Corrección para Ionic */
-ion-app {
-  overflow: visible !important;
-}
 
-/* Corrección para el contenido */
-ion-content {
-  contain: none;
-  overflow: visible;
-}
+    &:hover {
+      background: rgba(var(--ion-color-primary-rgb), 0.08);
+    }
 
-  }
+    &.danger {
+      ion-icon, span {
+        color: var(--ion-color-danger);
+      }
 
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+      &:hover {
+        background: rgba(var(--ion-color-danger-rgb), 0.08);
+      }
+    }
   }
 }
 
@@ -231,6 +231,23 @@ ion-content {
   height: var(--progress-bar-height);
   --progress-background: rgba(255, 255, 255, 0.3);
   --progress-color: white;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Modo oscuro */
@@ -241,16 +258,32 @@ ion-content {
   }
 
   .profile-menu {
-    background: var(--ion-color-step-100);
-    border-color: var(--ion-color-step-200);
+    background: rgba(var(--ion-color-step-150), 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     .menu-item {
-      --color: var(--ion-text-color);
-      --background-hover: rgba(var(--ion-color-primary-rgb), 0.1);
-      --border-color: var(--ion-color-step-200);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+
+      span {
+        color: var(--ion-text-color);
+      }
 
       ion-icon {
         color: var(--ion-color-step-600);
+      }
+
+      &:hover {
+        background: rgba(var(--ion-color-primary-rgb), 0.1);
+      }
+
+      &.danger {
+        ion-icon, span {
+          color: var(--ion-color-danger-tint);
+        }
+
+        &:hover {
+          background: rgba(var(--ion-color-danger-rgb), 0.1);
+        }
       }
     }
   }
@@ -290,5 +323,10 @@ ion-content {
 
   .action-button ion-icon {
     font-size: 1.3rem !important;
+  }
+
+  .profile-menu {
+    width: 200px;
+    right: 8px;
   }
 }

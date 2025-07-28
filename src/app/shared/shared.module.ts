@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './components/header/header.component';
+// import { HeaderComponent } from './components/header/header.component';
 import { IonicModule } from '@ionic/angular';
-
+import { HeaderComponent } from './components/header/header.component';
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     IonicModule,
-    HeaderComponent // Importar como standalone
+    HeaderComponent
   ],
   exports: [
-    HeaderComponent // Exportar para que otros módulos puedan usarlo
+    HeaderComponent
   ]
 })
 export class SharedModule {}
