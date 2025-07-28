@@ -6,29 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CursoService {
-  private apiUrl = 'http://localhost:3000/api/cursos';
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
-  // Para estudiantes
   getCursosEstudiante(estudianteId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/estudiante/${estudianteId}`);
+    return this.http.get(`${this.apiUrl}/estudiante/${estudianteId}/cursos`);
   }
 
-  // Para profesores
   getCursosProfesor(profesorId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/profesor/${profesorId}`);
-  }
-
-  getDetalleCurso(cursoId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${cursoId}`);
+    return this.http.get(`${this.apiUrl}/profesor/${profesorId}/cursos`);
   }
 
   crearCurso(cursoData: any): Observable<any> {
-    return this.http.post(this.apiUrl, cursoData);
-  }
-
-  actualizarCurso(cursoId: number, cursoData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${cursoId}`, cursoData);
+    return this.http.post(`${this.apiUrl}/profesor/cursos`, cursoData);
   }
 }

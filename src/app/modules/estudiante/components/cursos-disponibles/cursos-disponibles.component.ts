@@ -18,7 +18,7 @@ export class CursosDisponiblesComponent {
     {
       id: 1,
       titulo: 'Matemáticas Avanzadas',
-      profesor: 'Prof. García',
+      profesor: 'Prof. Uno',
       progreso: 65,
       imagen: '../../../../../assets/advanced-math-formulas-on-seamless-260nw-2500229937.webp',
       ultimoAcceso: '2023-11-20',
@@ -27,7 +27,7 @@ export class CursosDisponiblesComponent {
     {
       id: 2,
       titulo: 'Programación en JavaScript',
-      profesor: 'Prof. Martínez',
+      profesor: 'Prof. Uno',
       progreso: 30,
       imagen: '../../../../../assets/Unofficial_JavaScript_logo_2.svg.png',
       ultimoAcceso: '2023-11-18',
