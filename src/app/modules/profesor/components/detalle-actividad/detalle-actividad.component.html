@@ -48,10 +48,13 @@
           <ion-list>
             <ion-item *ngFor="let recurso of actividad.recursos">
               <ion-icon slot="start" name="document-outline"></ion-icon>
-              <ion-label>{{recurso}}</ion-label>
-              <ion-button fill="clear" slot="end" (click)="descargarArchivos([recurso])">
-                <ion-icon name="download-outline"></ion-icon>
-              </ion-button>
+            <!-- Para recursos -->
+<ion-item *ngFor="let recurso of actividad.recursos">
+  <ion-label>{{ recurso }}</ion-label>
+  <ion-button fill="clear" slot="end" (click)="descargarArchivo(recurso)">
+    <ion-icon name="download-outline"></ion-icon>
+  </ion-button>
+</ion-item>
             </ion-item>
           </ion-list>
         </div>
@@ -61,8 +64,11 @@
     <!-- Entregas de estudiantes -->
     <div class="seccion-entregas">
       <h2 class="titulo-seccion">
-        <ion-icon name="people-outline" class="icono-seccion"></ion-icon>
-        Entregas de Estudiantes
+  <ion-item *ngFor="let entrega of entregas">
+  <!-- ... otros elementos ... -->
+
+</ion-item>
+        Entregas de Estudiantes ver
       </h2>
 
       <ion-list>
@@ -87,9 +93,9 @@
             <ion-button *ngIf="entrega.estado === 'calificado'" fill="clear" size="small" (click)="calificarEntrega(entrega)">
               <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button *ngIf="entrega.archivos.length > 0" fill="clear" size="small" (click)="descargarArchivos(entrega.archivos)">
-              <ion-icon name="download-outline" slot="icon-only"></ion-icon>
-            </ion-button>
+            <!-- <ion-button *ngIf="entrega.archivos.length > 0" fill="clear" size="small" (click)="descargarArchivos(entrega.archivos)">
+              <ion-icon name="download-outline" slot="icon-only"></ion-icon> -->
+            <!-- </ion-button> -->
           </div>
         </ion-item>
       </ion-list>
