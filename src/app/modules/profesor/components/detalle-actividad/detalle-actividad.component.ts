@@ -14,7 +14,9 @@ import { ProfesorService } from '../../services/profesor.service';
 })
 export class DetalleActividadComponent implements OnInit {
   actividadId: number = 0;
-  actividad: any = null;
+  actividad: any = {
+    recursos: [] // Inicializa el array de recursos
+  };
   estudiantes: any[] = [];
   entregas: any[] = [];
 
@@ -29,6 +31,7 @@ export class DetalleActividadComponent implements OnInit {
     this.actividadId = +this.route.snapshot.paramMap.get('id')!;
     this.cargarActividad();
     this.cargarEstudiantes();
+    this.cargarRecursosManuales();
     this.cargarEntregas();
   }
 
@@ -51,7 +54,16 @@ export class DetalleActividadComponent implements OnInit {
 
     this.actividad = actividadesEjemplo.find(a => a.id === this.actividadId) || null;
   }
+  cargarRecursosManuales() {
+    // Lista de archivos que agregaste manualmente
+    const archivosManuales = [
+      'ejercicio_vectores.pdf',
+      'pdf_prueba_actividades.pdf',
+      'guia-practica.docx'
+    ];
 
+    this.actividad.recursos = archivosManuales;
+  }
   cargarEstudiantes() {
     // Simulación de datos
     this.estudiantes = [
@@ -142,9 +154,92 @@ export class DetalleActividadComponent implements OnInit {
 
     await alert.present();
   }
-
-  descargarArchivos(archivos: string[]) {
-    // Lógica para descargar archivos
-    console.log('Descargando archivos:', archivos);
+  cargarDatos() {
+    // Implementa tu lógica para cargar actividad y entregas
   }
+
+// detalle-actividad.component.ts
+descargarArchivo(nombreArchivo: string, esRecurso: boolean = true): void {
+  const tipo = esRecurso ? 'materials' : 'entregas';
+
+  this.profesorService.descargarArchivo(tipo, nombreArchivo).subscribe({
+    next: (response) => {
+      // Crear URL del blob
+      const blob = new Blob([response.body], {
+        type: response.headers.get('Content-Type') || 'application/octet-stream'
+      });
+
+      // Crear enlace de descarga
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      // Obtener nombre de archivo del header o usar el proporcionado
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let filename = nombreArchivo;
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename\*?=['"]?(?:UTF-\d['"]*)?([^;\r\n"']*)['"]?;?/i);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      // Limpieza
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    },
+    error: (err) => {
+      console.error('Error completo:', err);
+      let mensaje = 'Error al descargar el archivo';
+
+      if (err.error?.message) {
+        mensaje = err.error.message;
+      } else if (err.status === 404) {
+        mensaje = 'Archivo no encontrado en el servidor';
+      } else if (err.status === 500) {
+        mensaje = 'Error interno del servidor';
+      }
+
+      this.mostrarError(mensaje);
+
+      // Mostrar detalles adicionales en consola
+      if (err.error?.details) {
+        console.error('Detalles del error:', err.error.details);
+      }
+    }
+  });
+}
+
+private obtenerTipoMIME(nombreArchivo: string): string {
+  const extension = nombreArchivo.split('.').pop()?.toLowerCase() || '';
+  const tiposMIME: Record<string, string> = {
+    'pdf': 'application/pdf',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'xls': 'application/vnd.ms-excel',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'zip': 'application/zip',
+    'txt': 'text/plain'
+  };
+  return tiposMIME[extension] || 'application/octet-stream';
+}
+
+private obtenerMensajeError(err: any): string {
+  if (err.status === 404) return 'Archivo no encontrado en el servidor';
+  if (err.status === 500) return 'Error interno del servidor';
+  return 'Error al descargar el archivo';
+}
+
+private mostrarError(mensaje: string): void {
+  // Implementa tu sistema de notificación preferido
+  alert(mensaje); // Ejemplo básico
+}
+
 }
