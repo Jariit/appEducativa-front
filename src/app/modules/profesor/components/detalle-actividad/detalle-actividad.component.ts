@@ -1,38 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, AlertController, ModalController } from '@ionic/angular';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {
+  IonicModule,
+  AlertController,
+  ModalController,
+  ToastController
+} from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-detalle-actividad',
   templateUrl: './detalle-actividad.component.html',
   styleUrls: ['./detalle-actividad.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, RouterModule, FormsModule]
+  imports: [CommonModule, IonicModule, FormsModule]
 })
 export class DetalleActividadComponent implements OnInit {
   actividadId: number = 0;
   actividad: any = {
-    recursos: [] // Inicializa el array de recursos
+    recursos: []
   };
   estudiantes: any[] = [];
   entregas: any[] = [];
+  cargando: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private profesorService: ProfesorService,
     private alertController: AlertController,
-    private modalCtrl: ModalController
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
     this.actividadId = +this.route.snapshot.paramMap.get('id')!;
+    this.cargarDatos();
+  }
+
+  cargarDatos() {
+    this.cargando = true;
     this.cargarActividad();
     this.cargarEstudiantes();
-    this.cargarRecursosManuales();
     this.cargarEntregas();
+    this.cargando = false;
   }
 
   cargarActividad() {
@@ -40,30 +52,21 @@ export class DetalleActividadComponent implements OnInit {
     const actividadesEjemplo = [
       {
         id: 1,
-        titulo: 'Ejercicios prácticos',
+        titulo: 'Ejercicios prácticos de Álgebra Lineal',
         tipo: 'tarea',
-        descripcion: 'Problemas aplicados de álgebra lineal',
+        descripcion: 'Resuelva los problemas aplicados de álgebra lineal',
         fechaLimite: '2023-12-15',
         moduloId: 1,
         cursoId: 1,
         instrucciones: 'Resuelva los siguientes problemas y muestre todo el procedimiento.',
         puntos: 100,
-        recursos: ['Problemas.pdf', 'Ejemplos.docx']
+        recursos: ['ejercicio_vectores.pdf', 'pdf_prueba_actividades.pdf', 'guia-practica.docx']
       }
     ];
 
     this.actividad = actividadesEjemplo.find(a => a.id === this.actividadId) || null;
   }
-  cargarRecursosManuales() {
-    // Lista de archivos que agregaste manualmente
-    const archivosManuales = [
-      'ejercicio_vectores.pdf',
-      'pdf_prueba_actividades.pdf',
-      'guia-practica.docx'
-    ];
 
-    this.actividad.recursos = archivosManuales;
-  }
   cargarEstudiantes() {
     // Simulación de datos
     this.estudiantes = [
@@ -99,7 +102,6 @@ export class DetalleActividadComponent implements OnInit {
     ];
   }
 
-  // Método para obtener el avatar del estudiante
   getAvatarEstudiante(estudianteId: number): string {
     const estudiante = this.estudiantes.find(e => e.id === estudianteId);
     return estudiante?.avatar || 'assets/default-avatar.png';
@@ -147,6 +149,7 @@ export class DetalleActividadComponent implements OnInit {
             entrega.calificacion = data.calificacion;
             entrega.retroalimentacion = data.retroalimentacion;
             entrega.estado = 'calificado';
+            this.mostrarToast('Calificación guardada con éxito', 'success');
           }
         }
       ]
@@ -154,92 +157,98 @@ export class DetalleActividadComponent implements OnInit {
 
     await alert.present();
   }
-  cargarDatos() {
-    // Implementa tu lógica para cargar actividad y entregas
+
+  obtenerIcono(nombreArchivo: string): string {
+    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+    switch(extension) {
+      case 'pdf':
+        return 'document-text-outline';
+      case 'doc':
+      case 'docx':
+        return 'document-outline';
+      case 'xls':
+      case 'xlsx':
+        return 'document-outline';
+      case 'ppt':
+      case 'pptx':
+        return 'document-outline';
+      case 'zip':
+      case 'rar':
+        return 'archive-outline';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return 'image-outline';
+      default:
+        return 'document-outline';
+    }
   }
 
-// detalle-actividad.component.ts
-descargarArchivo(nombreArchivo: string, esRecurso: boolean = true): void {
-  const tipo = esRecurso ? 'materials' : 'entregas';
+  puedePrevisualizar(nombreArchivo: string): boolean {
+    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+    return ['pdf', 'jpg', 'jpeg', 'png', 'gif'].includes(extension || '');
+  }
 
-  this.profesorService.descargarArchivo(tipo, nombreArchivo).subscribe({
-    next: (response) => {
-      // Crear URL del blob
-      const blob = new Blob([response.body], {
-        type: response.headers.get('Content-Type') || 'application/octet-stream'
-      });
+async descargarRecurso(nombreArchivo: string, previsualizar: boolean = false): Promise<void> {
+  try {
+    console.log('Intentando descargar:', nombreArchivo);
 
-      // Crear enlace de descarga
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
+    this.cargando = true;
+    const tipo = 'materiales'; // O 'entregas' según corresponda
 
-      // Obtener nombre de archivo del header o usar el proporcionado
-      const contentDisposition = response.headers.get('Content-Disposition');
-      let filename = nombreArchivo;
-
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename\*?=['"]?(?:UTF-\d['"]*)?([^;\r\n"']*)['"]?;?/i);
-        if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1];
+    if (previsualizar) {
+      // Para previsualización
+      this.profesorService.descargarArchivo(tipo, nombreArchivo, true).subscribe({
+        next: () => {
+          this.mostrarToast('Archivo abierto en nueva pestaña', 'success');
+        },
+        error: (err) => {
+          console.error('Error al previsualizar:', err);
+          this.mostrarToast(`Error: ${err.message}`, 'danger');
+        },
+        complete: () => {
+          this.cargando = false;
         }
-      }
+      });
+    } else {
+      // Para descarga directa
+      this.profesorService.descargarArchivo(tipo, nombreArchivo).subscribe({
+        next: (response) => {
+          saveAs(response.body, nombreArchivo);
+          this.mostrarToast('Archivo descargado con éxito', 'success');
+        },
+        error: (err) => {
+          console.error('Error al descargar:', err);
+          this.mostrarToast(`Error: ${err.message}`, 'danger');
 
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-
-      // Limpieza
-      setTimeout(() => {
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      }, 100);
-    },
-    error: (err) => {
-      console.error('Error completo:', err);
-      let mensaje = 'Error al descargar el archivo';
-
-      if (err.error?.message) {
-        mensaje = err.error.message;
-      } else if (err.status === 404) {
-        mensaje = 'Archivo no encontrado en el servidor';
-      } else if (err.status === 500) {
-        mensaje = 'Error interno del servidor';
-      }
-
-      this.mostrarError(mensaje);
-
-      // Mostrar detalles adicionales en consola
-      if (err.error?.details) {
-        console.error('Detalles del error:', err.error.details);
-      }
+          // Mostrar detalles adicionales en consola
+          console.log('Nombre archivo:', nombreArchivo);
+          console.log('Tipo:', tipo);
+        },
+        complete: () => {
+          this.cargando = false;
+        }
+      });
     }
-  });
+  } catch (err) {
+    console.error('Error inesperado:', err);
+    this.mostrarToast('Ocurrió un error inesperado', 'danger');
+    this.cargando = false;
+  }
 }
 
-private obtenerTipoMIME(nombreArchivo: string): string {
-  const extension = nombreArchivo.split('.').pop()?.toLowerCase() || '';
-  const tiposMIME: Record<string, string> = {
-    'pdf': 'application/pdf',
-    'doc': 'application/msword',
-    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'xls': 'application/vnd.ms-excel',
-    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'zip': 'application/zip',
-    'txt': 'text/plain'
-  };
-  return tiposMIME[extension] || 'application/octet-stream';
-}
+  descargarEntrega(nombreArchivo: string): void {
+    this.descargarRecurso(nombreArchivo, false);
+  }
 
-private obtenerMensajeError(err: any): string {
-  if (err.status === 404) return 'Archivo no encontrado en el servidor';
-  if (err.status === 500) return 'Error interno del servidor';
-  return 'Error al descargar el archivo';
-}
-
-private mostrarError(mensaje: string): void {
-  // Implementa tu sistema de notificación preferido
-  alert(mensaje); // Ejemplo básico
-}
-
+  private async mostrarToast(mensaje: string, color: string = 'primary'): Promise<void> {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      position: 'top',
+      color: color
+    });
+    await toast.present();
+  }
 }
