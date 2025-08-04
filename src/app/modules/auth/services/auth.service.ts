@@ -12,7 +12,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'http://localhost:3001/api/auth';
   public redirectUrl?: string;
 
   constructor(private http: HttpClient, private router: Router) {}
