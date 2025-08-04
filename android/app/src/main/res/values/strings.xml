@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">APPEDUCATIVA</string>
+    <string name="title_activity_main">APPEDUCATIVA</string>
+    <string name="package_name">com.appeducativa.app</string>
+    <string name="custom_url_scheme">com.appeducativa.app</string>
+</resources>
