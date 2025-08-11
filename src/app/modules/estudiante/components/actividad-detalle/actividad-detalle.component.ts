@@ -5,7 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@angular/cdk/clipboard';
-
+import { EstudianteService } from '../../services/estudiante.service';
+import { saveAs } from 'file-saver';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-actividad-detalle',
   templateUrl: './actividad-detalle.component.html',
@@ -14,6 +16,8 @@ import { Clipboard } from '@angular/cdk/clipboard';
   imports: [CommonModule, IonicModule, FormsModule, RouterModule]
 })
 export class ActividadDetalleComponent {
+
+
   activities = [
     // ===== MATEMÁTICAS AVANZADAS =====
     // --- Álgebra Lineal ---
@@ -56,7 +60,7 @@ export class ActividadDetalleComponent {
       resources: 2,
       completed: true,
       content: 'Las matrices son arreglos rectangulares de números con aplicaciones en:\n\n- Sistemas de ecuaciones\n- Transformaciones lineales\n- Gráficos por computadora\n- Criptografía\n- Procesamiento de señales\n\nTemas cubiertos:\n- Tipos de matrices\n- Operaciones básicas\n- Determinantes y sus propiedades\n- Matriz inversa\n- Rango de una matriz',
-      videoUrl: 'https://example.com/math/matrices'
+      videoUrl: 'https://www.youtube.com/watch?v=ZK3O402wf1c'
     },
     {
       id: 4,
@@ -129,7 +133,7 @@ export class ActividadDetalleComponent {
       resources: 2,
       completed: true,
       content: 'JavaScript es un lenguaje de programación interpretado, orientado a objetos y multiplataforma.\n\nCaracterísticas clave:\n- Tipado dinámico\n- Funciones de primera clase\n- Prototype-based OOP\n- Single-threaded con event loop\n- Compatibilidad con todos los navegadores\n\nEntornos de ejecución:\n- Navegadores web\n- Node.js\n- Deno\n- Bun\n\nHerramientas:\n- Editores de código\n- Consola del navegador\n- Node REPL',
-      videoUrl: 'https://example.com/js/intro'
+      videoUrl: 'https://youtu.be/Q9fwkpxr3Dw?si=Uz3pKNOhy4Jf0DhR'
     },
     {
       id: 10,
@@ -209,7 +213,9 @@ export class ActividadDetalleComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private estudianteService: EstudianteService,
+    private sanitizer: DomSanitizer// Inyectar el servicio
   ) {
     this.route.params.subscribe(params => {
       const activityId = +params['id'];
@@ -217,12 +223,7 @@ export class ActividadDetalleComponent {
     });
   }
 
-  submitAssignment() {
-    this.activity.completed = true;
-    this.activity.submission = this.submissionText;
-    this.activity.submissionDate = new Date().toISOString();
-    // Aquí normalmente haríamos una llamada al backend
-  }
+
 
   getFileIcon(type: string): string {
     const icons: {[key: string]: string} = {
@@ -240,16 +241,62 @@ export class ActividadDetalleComponent {
     return `/estudiante/modulo/${this.activity?.moduleId}`;
   }
 
-  descargarRecurso(file: any) {
-    console.log('Descargando archivo:', file.name);
-    // Implementar lógica de descarga real aquí
-  }
+   async descargarRecurso(file: any, previsualizar: boolean = false): Promise<void> {
+    try {
+      const tipo = 'materiales'; // O 'entregas' según corresponda
 
-  verVideo() {
-    if (this.activity?.videoUrl) {
-      window.open(this.activity.videoUrl, '_blank');
+      if (previsualizar) {
+        this.estudianteService.obtenerArchivo(tipo, file.name, true).subscribe({
+          next: () => console.log('Archivo abierto para previsualización'),
+          error: (err) => console.error('Error al previsualizar:', err)
+        });
+      } else {
+        this.estudianteService.obtenerArchivo(tipo, file.name).subscribe({
+          next: (response) => {
+            saveAs(response.body, file.name);
+            console.log('Archivo descargado con éxito');
+          },
+          error: (err) => console.error('Error al descargar:', err)
+        });
+      }
+    } catch (err) {
+      console.error('Error inesperado:', err);
     }
   }
+
+  // Método para subir una entrega
+  async subirEntrega(archivos: FileList | null): Promise<void> {
+    if (!archivos || archivos.length === 0) return;
+
+    try {
+      const filesArray = Array.from(archivos);
+      this.estudianteService.subirEntrega(this.activity.id, filesArray).subscribe({
+        next: (response) => {
+          console.log('Entrega subida con éxito', response);
+          // Actualizar el estado de la actividad
+          this.activity.completed = true;
+          this.activity.submissionDate = new Date().toISOString();
+        },
+        error: (err) => console.error('Error al subir entrega:', err)
+      });
+    } catch (err) {
+      console.error('Error al procesar archivos:', err);
+    }
+  }
+  // En actividad-detalle.component.ts
+puedePrevisualizar(nombreArchivo: string): boolean {
+  const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+  return ['pdf', 'jpg', 'jpeg', 'png', 'gif'].includes(extension || '');
+}
+
+submitAssignment() {
+  if (this.submissionText.trim()) {
+    this.activity.completed = true;
+    this.activity.submissionDate = new Date().toISOString();
+    // Aquí podrías llamar al servicio para guardar el texto también
+  }
+}
+
 
   abrirEjemploInteractivo() {
     // URL de ejemplo para el entorno interactivo
@@ -261,4 +308,45 @@ export class ActividadDetalleComponent {
     // Aquí deberíamos mostrar algún toast/notificación de que se copió
     console.log('Código copiado al portapapeles');
   }
+    /**
+   * Verifica si una URL es de YouTube
+   */
+  isYouTubeUrl(url: string): boolean {
+    if (!url) return false;
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  }
+
+  /**
+   * Obtiene una URL segura para el iframe de YouTube
+   */
+  getSafeYouTubeUrl(url: string): SafeResourceUrl {
+    if (!url) return '';
+
+    // Convertir diferentes formatos de URL de YouTube a formato embed
+    let videoId = '';
+    if (url.includes('youtube.com/watch?v=')) {
+      videoId = url.split('v=')[1];
+      const ampersandPosition = videoId.indexOf('&');
+      if (ampersandPosition !== -1) {
+        videoId = videoId.substring(0, ampersandPosition);
+      }
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1];
+    }
+
+    const safeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(safeUrl);
+  }
+
+  /**
+   * Método para abrir videos que no son de YouTube
+   */
+  verVideo() {
+    if (this.activity?.videoUrl) {
+      window.open(this.activity.videoUrl, '_blank');
+    }
+  }
+
+
+
 }
