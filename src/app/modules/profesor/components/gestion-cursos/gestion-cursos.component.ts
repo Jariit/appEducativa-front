@@ -22,7 +22,8 @@ export class GestionCursosComponent {
       estudiantes: 25,
       estado: 'activo',
       fechaInicio: '2023-09-01',
-      fechaFin: '2023-12-15'
+      fechaFin: '2023-12-15',
+      imagen: '../../../../../assets/advanced-math-formulas-on-seamless-260nw-2500229937.webp'
     },
     {
       id: 2,
@@ -30,7 +31,8 @@ export class GestionCursosComponent {
       estudiantes: 18,
       estado: 'activo',
       fechaInicio: '2023-10-01',
-      fechaFin: '2024-01-20'
+      fechaFin: '2024-01-20',
+      imagen: '../../../../../assets/Unofficial_JavaScript_logo_2.svg.png'
     },
     {
       id: 3,

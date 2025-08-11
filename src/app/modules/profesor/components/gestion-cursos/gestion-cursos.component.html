@@ -54,7 +54,9 @@
       <div class="lista-cursos">
         <ion-card *ngFor="let curso of cursos" class="tarjeta-curso">
           <div class="contenedor-imagen">
-            <img src="assets/default-course.png" alt="{{curso.titulo}}" class="imagen-curso">
+            <img [src]="curso.imagen" alt="{{curso.titulo}}" class="imagen-curso">
+
+
             <div class="badge-estado" [class.activo]="curso.estado === 'activo'">
               {{curso.estado | uppercase}}
             </div>

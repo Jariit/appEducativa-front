@@ -243,6 +243,45 @@
       }
     }
   }
+  /* actividad-detalle.component.scss */
+/* ... (estilos existentes) ... */
+
+.contenedor-video {
+  margin: 15px 0;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+.contenedor-video-alternativo {
+  text-align: center;
+
+  .boton-video {
+    margin: 10px 0;
+  }
+
+  ion-note {
+    display: block;
+    margin-top: 5px;
+    color: var(--ion-color-medium);
+  }
+}
 }
 
 /* Responsive */
